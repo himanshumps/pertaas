@@ -1,6 +1,9 @@
 package org.redhat.hackathon;
 
+import io.quarkus.logging.Log;
+import io.quarkus.runtime.StartupEvent;
 import io.vertx.core.json.JsonObject;
+import jakarta.enterprise.event.Observes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 
@@ -13,4 +16,6 @@ public class HealthzController {
     public CompletionStage<String> getHealthz() {
         return CompletableFuture.completedFuture(JsonObject.of("success", true).encode());
     }
+
+
 }
