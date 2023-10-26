@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21_35-jdk-ubi9-minimal
+FROM docker.io/eclipse-temurin:21_35-jdk-ubi9-minimal
 # @sha256:f53c2fb071bb78506e568290025a7ab634cf219f41578c1657f202cb077f8536
 
 ENV LANGUAGE='en_US:en'
