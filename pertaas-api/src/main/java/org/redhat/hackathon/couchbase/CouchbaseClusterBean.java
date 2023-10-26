@@ -4,6 +4,7 @@ import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.ClusterOptions;
 import com.couchbase.client.java.env.ClusterEnvironment;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Default;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Produces;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -29,6 +30,7 @@ public class CouchbaseClusterBean {
      * @return The couchbase cluster object
      */
     @Produces
+    @Default
     Cluster cluster() {
         Cluster cluster = Cluster.connect(couchbaseConnectionString,
                 ClusterOptions.clusterOptions(couchbaseUsername, couchbasePassword)
