@@ -34,3 +34,15 @@ jobs:
         context: pertaas-api
         containerfiles: |
           ./pertaas-api/Dockerfile
+    - name: Push To dockerhub
+      id: push-to-dockerhub
+      uses: redhat-actions/push-to-registry@v2
+      with:
+        image: ${{ steps.build-image.outputs.image }}
+        tags: ${{ steps.build-image.outputs.tags }}
+        registry: hub.docker.com/himanshumps
+        username: ${{ secrets.DOCKER_USER }}
+        password: ${{ secrets.DOCKER_TOKEN }}
+
+    - name: Print images URL
+      run: echo "Images pushed to ${{ steps.push-to-dockerhub.outputs.registry-paths }}"
