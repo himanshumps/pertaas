@@ -32,4 +32,4 @@ jobs:
         image: pertaas-api
         context: pertaas-api
         containerfiles: |
-          ./Dockerfile
+          ./pertaas-api/Dockerfile
