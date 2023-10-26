@@ -30,6 +30,7 @@ jobs:
       uses: redhat-actions/buildah-build@v2
       with:
         image: pertaas-api
+        archs: aarch64, amd64, i386, ppc64le
         context: pertaas-api
         containerfiles: |
           ./pertaas-api/Dockerfile
