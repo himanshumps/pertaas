@@ -24,3 +24,12 @@ jobs:
 
     - name: Build with Maven
       run: mvn -B package --file pertaas-api/pom.xml
+      
+    - name: Buildah Action
+      id: build-image
+      uses: redhat-actions/buildah-build@v2
+      with:
+        image: pertaas-api
+        context: pertaas-api
+        containerfiles: |
+          ./Dockerfile
