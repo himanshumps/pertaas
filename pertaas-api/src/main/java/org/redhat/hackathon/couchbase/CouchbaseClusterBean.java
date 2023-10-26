@@ -16,17 +16,18 @@ public class CouchbaseClusterBean {
     @Inject
     ClusterEnvironment clusterEnvironment;
 
-    @ConfigProperty
+    @ConfigProperty(name="couchbaseConnectionString")
     String couchbaseConnectionString;
 
-    @ConfigProperty(defaultValue = "pertaas_user")
+    @ConfigProperty(name = "couchbaseUsername", defaultValue = "pertaas_user")
     String couchbaseUsername;
 
-    @ConfigProperty
+    @ConfigProperty(name = "couchbasePassword")
     String couchbasePassword;
 
     /**
      * Creates the couchbase cluster object and waits for a minute to initialize
+     *
      * @return The couchbase cluster object
      */
     @Produces

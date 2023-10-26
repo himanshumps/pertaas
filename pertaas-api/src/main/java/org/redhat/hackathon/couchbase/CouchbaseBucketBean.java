@@ -18,7 +18,7 @@ public class CouchbaseBucketBean {
 
     @Inject
     Cluster cluster;
-    @ConfigProperty(defaultValue = "pertaas")
+    @ConfigProperty(name = "couchbaseBucket", defaultValue = "pertaas")
     String couchbaseBucket;
 
     @Produces
@@ -28,8 +28,6 @@ public class CouchbaseBucketBean {
         bucket.waitUntilReady(Duration.ofMinutes(1));
         return bucket;
     }
-
-
 
 
 }
