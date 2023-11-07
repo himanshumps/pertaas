@@ -21,6 +21,7 @@ import jakarta.ws.rs.Path;
 public class JobController {
 
 
+  @Inject
   TektonClient tektonClient;
 
   @Inject
