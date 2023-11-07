@@ -21,10 +21,10 @@ import jakarta.ws.rs.Path;
 public class JobController {
 
 
-  @Inject
+  //@Inject
   TektonClient tektonClient;
 
-  @Inject
+  //@Inject
   Bucket bucket;
 
   @POST
@@ -32,8 +32,8 @@ public class JobController {
   @RunOnVirtualThread
   public String createJobViaTektonPipeline(String jsonString) {
     Log.info("Received: " + jsonString);
-    CounterResult counterResult = bucket.defaultCollection().binary().increment("JOB_COUNTER", IncrementOptions.incrementOptions().initial(1));
-    String jobId = "job-" +  Long.valueOf(counterResult.content()).intValue();
+    //CounterResult counterResult = bucket.defaultCollection().binary().increment("JOB_COUNTER", IncrementOptions.incrementOptions().initial(1));
+    String jobId = "job-1";// +  Long.valueOf(counterResult.content()).intValue();
     JsonObject jsonObject = new JsonObject(jsonString);
     String stepDuration = jsonObject.getString("stepDuration", "10");
     String github_url = jsonObject.getString("github_url");

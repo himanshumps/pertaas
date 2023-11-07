@@ -114,12 +114,12 @@
                 <!-- Page Heading -->
                 <!--<h1 class="h3 mb-2 text-gray-800">Start Test</h1> -->
 
-                <form class="user" action="/job/create" method="post">
+                <form class="user">
                     <div class="form-group">
                         <label for="request_json">Request JSON</label>
                         <textarea class="form-control"
-                               id="request_json"
-                               rows="3">{"hostname":"pertaas-api-himanshumps-1-dev.apps.sandbox-m3.1530.p1.openshiftapps.com","port":443,"ssl":true,"maxConnections":10,"runDurationInSeconds":180,"requestPerSecond":10000000,"httpRequests":[{"method":"GET","uri":"/healthz","headers":null,"queryParams":null,"pathParams":null,"body":null}]}</textarea>
+                                  id="request_json"
+                                  rows="3">{"hostname":"pertaas-api-himanshumps-1-dev.apps.sandbox-m3.1530.p1.openshiftapps.com","port":443,"ssl":true,"maxConnections":10,"runDurationInSeconds":180,"requestPerSecond":10000000,"httpRequests":[{"method":"GET","uri":"/healthz","headers":null,"queryParams":null,"pathParams":null,"body":null}]}</textarea>
                     </div>
                     <div class="form-group">
                         <label for="github_url">Github URL</label>
@@ -128,10 +128,10 @@
                                value="https://github.com/himanshumps/pertaas-job.git">
                     </div>
                     <div class="form-group">
-                            <label for="revision">Branch / Tag / Revision</label>
-                            <input type="text" class="form-control"
-                                   id="revision"
-                                   value="main">
+                        <label for="revision">Branch / Tag / Revision</label>
+                        <input type="text" class="form-control"
+                               id="revision"
+                               value="main">
                     </div>
                     <div class="form-group">
                         <label for="stepDuration">Snapshot Duration (in seconds)</label>
@@ -181,7 +181,24 @@
 <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
 </a>
+<div class="modal" id="statusModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Job Status</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Bootstrap core JavaScript-->
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -200,33 +217,42 @@
 <script src="js/demo/chart-area-demo.js"></script>
 <script src="js/demo/chart-pie-demo.js"></script>
 <script>
-    $(document).ready(function(){
-        $("form").submit(function(){
+    $(document).ready(function () {
+        $("form").submit(function () {
             // Check if the json is valid json or not
-            if(!(isJsonString($("#request_json").val()))) {
+            if (!(isJsonString($("#request_json").val()))) {
                 alert("Invalid json in request json");
                 return false;
             }
-            var postJson={};
-            postJson["request_json"]=JSON.parse($("#request_json").val());
-            postJson["github_url"]=$("#github_url").val();
-            postJson.revision=$("#revision").val();
-            postJson.stepDuration=$("#stepDuration").val();
-            postJson.cpu=$("#cpu").val();
-            postJson.ram=$("#ram").val();
+            var postJson = {};
+            postJson.request_json = JSON.parse($("#request_json").val());
+            postJson.github_url = $("#github_url").val();
+            postJson.revision = $("#revision").val();
+            postJson.stepDuration = $("#stepDuration").val();
+            postJson.cpu = $("#cpu").val();
+            postJson.ram = $("#ram").val();
             console.log(JSON.stringify(postJson));
-            
+            $.post("/job/create",
+                JSON.stringify(postJson),
+                function (data, status) {
+                    alert(data);
+                    alert(status);
+                    $('.modal-body').html(status);
+                    $('#statusModal').modal('show');
+                }
+            );
             return false;
         });
     });
+
     function isJsonString(str) {
-    try {
-        JSON.parse(str);
-    } catch (e) {
-        return false;
+        try {
+            JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        return true;
     }
-    return true;
-}
 </script>
 </body>
 
