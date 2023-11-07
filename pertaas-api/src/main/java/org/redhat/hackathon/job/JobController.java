@@ -82,6 +82,6 @@ public class JobController {
         .build();
     tektonClient.v1().pipelineRuns().create(pipelineRunBuilderSpecNested);
 
-    return "The job has been triggered";
+    return "The job with the ID: \"" + jobId  + "\" has been triggered. Please keep a note of this job id which you can use to monitor the job";
   }
 }
