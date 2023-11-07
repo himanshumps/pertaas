@@ -181,8 +181,8 @@
 <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
 </a>
-<div class="modal" id="statusModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+<div class="modal" id="statusModal" tabindex="-1">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Job Status</h5>
@@ -190,7 +190,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="modelBodyText">
 
             </div>
             <div class="modal-footer">
@@ -204,8 +204,9 @@
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 <!-- Core plugin JavaScript-->
-<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 <script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
 
 <!-- Custom scripts for all pages-->
 <script src="js/sb-admin-2.min.js"></script>
@@ -232,15 +233,29 @@
             postJson.cpu = $("#cpu").val();
             postJson.ram = $("#ram").val();
             console.log(JSON.stringify(postJson));
-            $.post("/job/create",
-                JSON.stringify(postJson),
-                function (data, status) {
-                    alert(data);
-                    alert(status);
-                    $('.modal-body').html(status);
-                    $('#statusModal').modal('show');
-                }
-            );
+            $.ajax({
+                "async": true,
+                "crossDomain": true,
+                "url": "/job/create",
+                "data": JSON.stringify(postJson),
+                "method": "POST"
+            })
+                .done(
+                    function (response) {
+                        console.log("success")
+                        console.log(response);
+                        var myModal = new bootstrap.Modal(document.getElementById("statusModal"), {});
+                        document.getElementById("modelBodyText").innerHTML = response;
+                        myModal.show();
+                    }
+                )
+                .fail(function (response) {
+                    console.log("fail")
+                    console.log(response);
+                    var myModal = new bootstrap.Modal(document.getElementById("statusModal"), {});
+                    document.getElementById("modelBodyText").innerHTML = response;
+                    myModal.show();
+                });
             return false;
         });
     });
