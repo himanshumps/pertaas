@@ -77,7 +77,7 @@
         </li>
         <li class="nav-item active">
             <a class="nav-link" href="matrixView.html">
-                <i class="fas fa-fw fa-table"></i>
+                <i class="fas fa-fw fa-cloud"></i>
                 <span>Create Custom Image</span></a>
         </li>
 
@@ -117,9 +117,16 @@
                         <label for="image_name">Image Name</label>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
-                                <span class="input-group-text" id="basic-addon3">pertaas-</span>
+                                <span class="input-group-text" id="basic-addon3">pertaas-j-</span>
                             </div>
-                            <input type="text" class="form-control" id="image_name" aria-describedby="basic-addon3" maxlength="240"  required>
+                            <!-- set the lenth as 200 as we need additional bytes for storing it in couchbase -->
+                            <input type="text" class="form-control" id="image_name" aria-describedby="basic-addon3" maxlength="200" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="image_description">Image Description</label>
+                        <div class="input-group mb-3">
+                            <textarea class="form-control" id="image_description" aria-describedby="basic-addon3" rows="3"  placeholder="Please provide image description" required></textarea>
                         </div>
                     </div>
                     <div class="form-group">
@@ -209,14 +216,15 @@
                 return false;
             }
             var postJson = {};
-            postJson.image_name = "pertaas-" + $("#image_name").val();
+            postJson.image_name = "pertaas-j-" + $("#image_name").val();
+            postJson.image_description =  $("#image_description").val();
             postJson.github_url = $("#github_url").val();
             postJson.github_revision = $("#revision").val();
             console.log(JSON.stringify(postJson));
             $.ajax({
                 "async": true,
                 "crossDomain": true,
-                "url": "/job/create",
+                "url": "/customImage/create",
                 "data": JSON.stringify(postJson),
                 "method": "POST"
             })
@@ -250,7 +258,7 @@
     }
     function validate(field) {
         regex = /^[a-z0-9]+(?:[._-]{1,2}[a-z0-9]+)*$/
-        textBoxVal = "pertaas-" + field.value;
+        textBoxVal = "pertaas-j-" + field.value;
         console.log(textBoxVal);
         if (regex.test(textBoxVal)) {
             return true;
