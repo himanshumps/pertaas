@@ -136,6 +136,7 @@ public class MatrixController {
                 case String s when s.startsWith("request_bytes "): yield s.replace("request_bytes", "Request Bytes");
                 case String s when s.startsWith("response_received "): yield s.replace("response_received", "Response Received");
                 case String s when s.startsWith("response_bytes "): yield s.replace("response_bytes", "Response Bytes");
+                case String s when s.startsWith("response_time_percentile "): yield s.replace("response_time_percentile", "Response Time");
                 default:
                     throw new IllegalStateException("Unexpected value: " + columnHeader);
             });
