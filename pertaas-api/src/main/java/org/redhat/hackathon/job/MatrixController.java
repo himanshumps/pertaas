@@ -143,7 +143,7 @@ public class MatrixController {
         }
         // Data in datatable format
         // Column names
-        JsonArray columns = JsonArray.create();
+        Set<JsonObject> columns = new LinkedHashSet<>();
         for(String columnName : columnNamesToDisplay) {
             columns.add(JsonObject.create().put("title", columnName));
         }
