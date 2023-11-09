@@ -58,21 +58,27 @@ public class MatrixController {
             Set<String> columnHeaders = new LinkedHashSet<>();
             columnHeaders.add("scan_timestamp");
             columnHeaders.add("active_connections");
+
             for (JsonObject jsonObject : queryResult) {
-                jsonObject.getArray("request_sent").forEach(o -> columnHeaders.addAll(((JsonObject) o).toMap().keySet()));
+                if (jsonObject.getArray("request_sent") != null)
+                    jsonObject.getArray("request_sent").forEach(o -> columnHeaders.addAll(((JsonObject) o).toMap().keySet()));
             }
             for (JsonObject jsonObject : queryResult) {
-                jsonObject.getArray("request_bytes").forEach(o -> columnHeaders.addAll(((JsonObject) o).toMap().keySet()));
+                if (jsonObject.getArray("request_bytes") != null)
+                    jsonObject.getArray("request_bytes").forEach(o -> columnHeaders.addAll(((JsonObject) o).toMap().keySet()));
             }
             for (JsonObject jsonObject : queryResult) {
-                jsonObject.getArray("response_received").forEach(o -> columnHeaders.addAll(((JsonObject) o).toMap().keySet()));
+                if (jsonObject.getArray("response_received") != null)
+                    jsonObject.getArray("response_received").forEach(o -> columnHeaders.addAll(((JsonObject) o).toMap().keySet()));
             }
             for (JsonObject jsonObject : queryResult) {
-                jsonObject.getArray("response_bytes").forEach(o -> columnHeaders.addAll(((JsonObject) o).toMap().keySet()));
+                if (jsonObject.getArray("response_bytes") != null)
+                    jsonObject.getArray("response_bytes").forEach(o -> columnHeaders.addAll(((JsonObject) o).toMap().keySet()));
             }
             // Get the column headers for response type percentiles as there might be many
             for (JsonObject jsonObject : queryResult) {
-                jsonObject.getArray("response_time_percentile").forEach(o -> columnHeaders.addAll(((JsonObject) o).toMap().keySet()));
+                if (jsonObject.getArray("response_time_percentile") != null)
+                    jsonObject.getArray("response_time_percentile").forEach(o -> columnHeaders.addAll(((JsonObject) o).toMap().keySet()));
             }
             List<List<String>> combinedRows = new ArrayList<>();
             // Loop through the set to fetch the values
