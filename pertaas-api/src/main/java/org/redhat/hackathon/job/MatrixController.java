@@ -48,116 +48,129 @@ public class MatrixController {
                 """.replace("~BUCKET_NAME~", bucket.name()).replace("~JOB_ID~", jobId);
         List<JsonObject> queryResult = cluster.query(query, QueryOptions.queryOptions().readonly(true))
                 .rowsAsObject();
-        // Create the column header for the table
-        Set<String> columnHeaders = new LinkedHashSet<>();
-        columnHeaders.add("scan_timestamp");
-        columnHeaders.add("active_connections");
-        for(JsonObject jsonObject : queryResult) {
-            jsonObject.getArray("request_sent").forEach(o -> columnHeaders.addAll(((JsonObject)o).toMap().keySet()));
-        }
-        for(JsonObject jsonObject : queryResult) {
-            jsonObject.getArray("request_bytes").forEach(o -> columnHeaders.addAll(((JsonObject)o).toMap().keySet()));
-        }
-        for(JsonObject jsonObject : queryResult) {
-            jsonObject.getArray("response_received").forEach(o -> columnHeaders.addAll(((JsonObject)o).toMap().keySet()));
-        }
-        for(JsonObject jsonObject : queryResult) {
-            jsonObject.getArray("response_bytes").forEach(o -> columnHeaders.addAll(((JsonObject)o).toMap().keySet()));
-        }
-        // Get the column headers for response type percentiles as there might be many
-        for (JsonObject jsonObject : queryResult) {
-            jsonObject.getArray("response_time_percentile").forEach(o -> columnHeaders.addAll(((JsonObject)o).toMap().keySet()));
-        }
-        List<List<String>> combinedRows = new ArrayList<>();
-        // Loop through the set to fetch the values
-        for (JsonObject jsonObject : queryResult) {
-            List<String> rowValues = new ArrayList<>();
-            for (String columnName : columnHeaders) {
-                switch (columnName) {
-                    case "scan_timestamp", "active_connections" -> rowValues.add(jsonObject.getString(columnName) == null ? "" : jsonObject.getString(columnName));
-                    case String s when s.startsWith("request_sent ") -> {
-                        AtomicReference<String> stringAtomicReference = new AtomicReference<>("");
-                        jsonObject.getArray("request_sent").forEach(o -> {
-                            JsonObject j = (JsonObject) o;
-                            if(j.getString(s) != null) {
-                                stringAtomicReference.set(j.getString(columnName));
-                            }
-                        });
-                        rowValues.add(stringAtomicReference.get());
-                    }
-                    case String s when s.startsWith("request_bytes ") -> {
-                        AtomicReference<String> stringAtomicReference = new AtomicReference<>("");
-                        jsonObject.getArray("request_bytes").forEach(o -> {
-                            JsonObject j = (JsonObject) o;
-                            if(j.getString(s) != null) {
-                                stringAtomicReference.set(j.getString(s));
-                            }
-                        });
-                        rowValues.add(stringAtomicReference.get());
-                    }
-                    case String s when s.startsWith("response_received ") -> {
-                        AtomicReference<String> stringAtomicReference = new AtomicReference<>("");
-                        jsonObject.getArray("response_received").forEach(o -> {
-                            JsonObject j = (JsonObject) o;
-                            if(j.getString(s) != null) {
-                                stringAtomicReference.set(j.getString(columnName));
-                            }
-                        });
-                        rowValues.add(stringAtomicReference.get());
-                    }
-                    case String s when s.startsWith("response_bytes ") -> {
-                        AtomicReference<String> stringAtomicReference = new AtomicReference<>("");
-                        jsonObject.getArray("response_bytes").forEach(o -> {
-                            JsonObject j = (JsonObject) o;
-                            if(j.getString(s) != null) {
-                                stringAtomicReference.set(j.getString(columnName));
-                            }
-                        });
-                        rowValues.add(stringAtomicReference.get());
-                    }
-                    case String s when s.startsWith("response_time_percentile ") -> {
-                        AtomicReference<String> stringAtomicReference = new AtomicReference<>("");
-                        jsonObject.getArray("response_time_percentile").forEach(o -> {
-                            JsonObject j = (JsonObject) o;
-                            if(j.getString(s) != null) {
-                                stringAtomicReference.set(j.getString(columnName));
-                            }
-                        });
-                        rowValues.add(stringAtomicReference.get());
-                    }
-                    default -> throw new IllegalStateException("Unexpected value: " + columnName);
-                }
+        if (queryResult.size() > 0) {
+            // Create the column header for the table
+            Set<String> columnHeaders = new LinkedHashSet<>();
+            columnHeaders.add("scan_timestamp");
+            columnHeaders.add("active_connections");
+            for (JsonObject jsonObject : queryResult) {
+                jsonObject.getArray("request_sent").forEach(o -> columnHeaders.addAll(((JsonObject) o).toMap().keySet()));
             }
-            combinedRows.add(rowValues);
+            for (JsonObject jsonObject : queryResult) {
+                jsonObject.getArray("request_bytes").forEach(o -> columnHeaders.addAll(((JsonObject) o).toMap().keySet()));
+            }
+            for (JsonObject jsonObject : queryResult) {
+                jsonObject.getArray("response_received").forEach(o -> columnHeaders.addAll(((JsonObject) o).toMap().keySet()));
+            }
+            for (JsonObject jsonObject : queryResult) {
+                jsonObject.getArray("response_bytes").forEach(o -> columnHeaders.addAll(((JsonObject) o).toMap().keySet()));
+            }
+            // Get the column headers for response type percentiles as there might be many
+            for (JsonObject jsonObject : queryResult) {
+                jsonObject.getArray("response_time_percentile").forEach(o -> columnHeaders.addAll(((JsonObject) o).toMap().keySet()));
+            }
+            List<List<String>> combinedRows = new ArrayList<>();
+            // Loop through the set to fetch the values
+            for (JsonObject jsonObject : queryResult) {
+                List<String> rowValues = new ArrayList<>();
+                for (String columnName : columnHeaders) {
+                    switch (columnName) {
+                        case "scan_timestamp", "active_connections" ->
+                                rowValues.add(jsonObject.getString(columnName) == null ? "" : jsonObject.getString(columnName));
+                        case String s when s.startsWith("request_sent ") -> {
+                            AtomicReference<String> stringAtomicReference = new AtomicReference<>("");
+                            jsonObject.getArray("request_sent").forEach(o -> {
+                                JsonObject j = (JsonObject) o;
+                                if (j.getString(s) != null) {
+                                    stringAtomicReference.set(j.getString(columnName));
+                                }
+                            });
+                            rowValues.add(stringAtomicReference.get());
+                        }
+                        case String s when s.startsWith("request_bytes ") -> {
+                            AtomicReference<String> stringAtomicReference = new AtomicReference<>("");
+                            jsonObject.getArray("request_bytes").forEach(o -> {
+                                JsonObject j = (JsonObject) o;
+                                if (j.getString(s) != null) {
+                                    stringAtomicReference.set(j.getString(s));
+                                }
+                            });
+                            rowValues.add(stringAtomicReference.get());
+                        }
+                        case String s when s.startsWith("response_received ") -> {
+                            AtomicReference<String> stringAtomicReference = new AtomicReference<>("");
+                            jsonObject.getArray("response_received").forEach(o -> {
+                                JsonObject j = (JsonObject) o;
+                                if (j.getString(s) != null) {
+                                    stringAtomicReference.set(j.getString(columnName));
+                                }
+                            });
+                            rowValues.add(stringAtomicReference.get());
+                        }
+                        case String s when s.startsWith("response_bytes ") -> {
+                            AtomicReference<String> stringAtomicReference = new AtomicReference<>("");
+                            jsonObject.getArray("response_bytes").forEach(o -> {
+                                JsonObject j = (JsonObject) o;
+                                if (j.getString(s) != null) {
+                                    stringAtomicReference.set(j.getString(columnName));
+                                }
+                            });
+                            rowValues.add(stringAtomicReference.get());
+                        }
+                        case String s when s.startsWith("response_time_percentile ") -> {
+                            AtomicReference<String> stringAtomicReference = new AtomicReference<>("");
+                            jsonObject.getArray("response_time_percentile").forEach(o -> {
+                                JsonObject j = (JsonObject) o;
+                                if (j.getString(s) != null) {
+                                    stringAtomicReference.set(j.getString(columnName));
+                                }
+                            });
+                            rowValues.add(stringAtomicReference.get());
+                        }
+                        default -> throw new IllegalStateException("Unexpected value: " + columnName);
+                    }
+                }
+                combinedRows.add(rowValues);
+            }
+            Set<String> columnNamesToDisplay = getFormattedColumnNames(columnHeaders);
+            // Data in datatable format
+            // Column names
+            Set<JsonObject> columns = new LinkedHashSet<>();
+            for (String columnName : columnNamesToDisplay) {
+                columns.add(JsonObject.create().put("title", columnName));
+            }
+            // Data
+            JsonArray data = JsonArray.from(combinedRows.toArray());
+            // Return table
+            return JsonObject.create().put("columns", JsonArray.from(columns.toArray())).put("data", data).toString();
+        } else {
+            return JsonObject.create().put("columns", JsonArray.create()).put("data", JsonArray.create()).toString();
         }
-        Set<String> columnNamesToDisplay = getFormattedColumnNames(columnHeaders);
-        // Data in datatable format
-        // Column names
-        Set<JsonObject> columns = new LinkedHashSet<>();
-        for(String columnName : columnNamesToDisplay) {
-            columns.add(JsonObject.create().put("title", columnName));
-        }
-        // Data
-        JsonArray data = JsonArray.from(combinedRows.toArray());
-        // Return table
-        return JsonObject.create().put("columns", JsonArray.from(columns.toArray())).put("data", data).toString();
     }
 
     private Set<String> getFormattedColumnNames(Set<String> columnHeaders) {
         Set<String> columnNamesToDisplay = new LinkedHashSet<>();
-        for(String columnHeader : columnHeaders) {
+        for (String columnHeader : columnHeaders) {
             columnNamesToDisplay.add(switch (columnHeader) {
-                case "scan_timestamp": yield "Scan Timestamp";
-                case "active_connections": yield "Active conn";
-                case String s when s.startsWith("request_sent "): yield s.replace("request_sent", "Request Sent");
-                case String s when s.startsWith("request_bytes "): yield s.replace("request_bytes", "Request Bytes");
-                case String s when s.startsWith("response_received "): yield s.replace("response_received", "Response Received");
-                case String s when s.startsWith("response_bytes "): yield s.replace("response_bytes", "Response Bytes");
-                case String s when s.startsWith("response_time_percentile "): yield s.replace("response_time_percentile", "Response Time");
+                case "scan_timestamp":
+                    yield "Scan Timestamp";
+                case "active_connections":
+                    yield "Active conn";
+                case String s when s.startsWith("request_sent "):
+                    yield s.replace("request_sent", "Request Sent");
+                case String s when s.startsWith("request_bytes "):
+                    yield s.replace("request_bytes", "Request Bytes");
+                case String s when s.startsWith("response_received "):
+                    yield s.replace("response_received", "Response Received");
+                case String s when s.startsWith("response_bytes "):
+                    yield s.replace("response_bytes", "Response Bytes");
+                case String s when s.startsWith("response_time_percentile "):
+                    yield s.replace("response_time_percentile", "Response Time");
                 default:
                     throw new IllegalStateException("Unexpected value: " + columnHeader);
             });
         }
         return columnNamesToDisplay;
     }
+}
 }
