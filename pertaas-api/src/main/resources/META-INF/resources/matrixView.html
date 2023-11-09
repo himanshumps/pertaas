@@ -130,7 +130,7 @@
                 </form>
 
                 <!-- DataTable -->
-                <div id="datatable1" class="card shadow mb-4 collapse">
+                <div id="dataTableCard" class="card shadow mb-4 collapse">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Scrape Metrics</h6>
                     </div>
@@ -211,15 +211,15 @@
         console.log($("#jobID").val());
         $.ajax({
                 "async": true,
-                "crossDomain": true,
-                "url": "https://pertaas-api-himanshumps-1-dev.apps.sandbox-m3.1530.p1.openshiftapps.com/metrics/" + $("#jobID").val(),
+                "crossDomain": false,
+                "url": "/metrics/" + $("#jobID").val(),
                 "method": "GET"
             })
                 .done(
                     function (response) {
                         console.log("success")
                         console.log(response);
-                        var dataVar = JSON.parse(response);
+                        var dataVar = response;
                         $('#tDataTable').DataTable({
                             columnDefs: [{
                               targets: 0,
@@ -228,7 +228,7 @@
                             columns: dataVar.columns,
                             data: dataVar.data
                         });
-                         $("#datatable1").toggle();
+                         $("#dataTableCard").toggle();
                     }
                 )
                 .fail(function (response) {
