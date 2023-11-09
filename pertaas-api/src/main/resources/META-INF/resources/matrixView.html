@@ -209,11 +209,10 @@
 
 <script>
     function fetchData() {
-
         console.log($("#jobID").val());
         $.ajax({
                 "async": true,
-                "crossDomain": false,
+                "crossDomain": true,
                 "url": "/metrics/" + $("#jobID").val(),
                 "method": "GET"
             })
@@ -221,7 +220,8 @@
                     function (response) {
                         console.log("success")
                         console.log(response);
-                        var dataVar = response;
+                        var dataVar = JSON.parse(response);
+                        console.log(dataVar);
                         $('#tDataTable').DataTable({
                             columnDefs: [{
                               targets: 0,
@@ -230,7 +230,6 @@
                             columns: dataVar.columns,
                             data: dataVar.data
                         });
-                         $("#dataTableCard").toggle();
                     }
                 )
                 .fail(function (response) {
