@@ -127,7 +127,20 @@ public class MatrixController {
             }
             combinedRows.add(rowValues);
         }
-        Set<String> columnNamesToDisplay = new HashSet<>();
+        Set<String> columnNamesToDisplay = getFormattedColumnNames(columnHeaders);
+        // Data in datatable format
+        // Column names
+        Set<JsonObject> columns = new LinkedHashSet<>();
+        for(String columnName : columnNamesToDisplay) {
+            columns.add(JsonObject.create().put("title", columnName));
+        }
+        JsonArray data = JsonArray.from(combinedRows.toArray());
+        // Return table
+        return JsonObject.create().put("columns", JsonArray.from(columns.toArray())).put("data", data).toString();
+    }
+
+    private Set<String> getFormattedColumnNames(Set<String> columnHeaders) {
+        Set<String> columnNamesToDisplay = new LinkedHashSet<>();
         for(String columnHeader : columnHeaders) {
             columnNamesToDisplay.add(switch (columnHeader) {
                 case "scan_timestamp": yield "Scan Timestamp";
@@ -141,14 +154,6 @@ public class MatrixController {
                     throw new IllegalStateException("Unexpected value: " + columnHeader);
             });
         }
-        // Data in datatable format
-        // Column names
-        Set<JsonObject> columns = new LinkedHashSet<>();
-        for(String columnName : columnNamesToDisplay) {
-            columns.add(JsonObject.create().put("title", columnName));
-        }
-        JsonArray data = JsonArray.from(combinedRows.toArray());
-        // Return table
-        return JsonObject.create().put("columns", JsonArray.from(columns.toArray())).put("data", data).toString();
+        return columnNamesToDisplay;
     }
 }
