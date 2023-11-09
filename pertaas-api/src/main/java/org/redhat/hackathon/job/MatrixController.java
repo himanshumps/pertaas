@@ -149,6 +149,6 @@ public class MatrixController {
         }
         JsonArray data = JsonArray.from(combinedRows.toArray());
         // Return table
-        return JsonObject.create().put("columns", columns).put("data", data).toString();
+        return JsonObject.create().put("columns", JsonArray.from(columns.toArray())).put("data", data).toString();
     }
 }
