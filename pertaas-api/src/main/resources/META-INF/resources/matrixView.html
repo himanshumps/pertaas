@@ -210,11 +210,11 @@
 <script>
     function fetchData() {
         $('#dataTableCard').removeClass('d-block');
-        if ( $.fn.dataTable.isDataTable( '#tDataTable' ) ) {
+        /*if ( $.fn.dataTable.isDataTable( '#tDataTable' ) ) {
             console.log("It is a data table .. destroying now");
             table = $('#tDataTable').DataTable();
             table.destroy();
-        }
+        }*/
         console.log($("#jobID").val());
         $.ajax({
                 "async": true,
@@ -229,6 +229,7 @@
                         var dataVar = JSON.parse(response);
                         console.log(dataVar);
                         $('#tDataTable').DataTable({
+                            destroy: true,
                             columnDefs: [{
                               targets: 0,
                               className: 'text-nowrap'
