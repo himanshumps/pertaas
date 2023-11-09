@@ -53,6 +53,9 @@ public class MatrixController {
         columnHeaders.add("scan_timestamp");
         columnHeaders.add("active_connections");
         for(JsonObject jsonObject : queryResult) {
+            jsonObject.getArray("request_sent").forEach(o -> columnHeaders.addAll(((JsonObject)o).toMap().keySet()));
+        }
+        for(JsonObject jsonObject : queryResult) {
             jsonObject.getArray("request_bytes").forEach(o -> columnHeaders.addAll(((JsonObject)o).toMap().keySet()));
         }
         for(JsonObject jsonObject : queryResult) {
@@ -134,6 +137,7 @@ public class MatrixController {
         for(String columnName : columnNamesToDisplay) {
             columns.add(JsonObject.create().put("title", columnName));
         }
+        // Data
         JsonArray data = JsonArray.from(combinedRows.toArray());
         // Return table
         return JsonObject.create().put("columns", JsonArray.from(columns.toArray())).put("data", data).toString();
