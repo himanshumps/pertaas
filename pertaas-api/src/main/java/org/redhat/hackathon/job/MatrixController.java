@@ -160,7 +160,7 @@ public class MatrixController {
             // Return table
             return JsonObject.create().put("columns", JsonArray.from(columns.toArray())).put("data", data).toString();
         } else {
-            return JsonObject.create().put("columns", JsonArray.create().add(JsonObject.create().put("title", ""))).put("data", JsonArray.create().add(JsonArray.create().add("No Data to display"))).toString();
+            return JsonObject.create().put("columns", JsonArray.create().add(JsonObject.create().put("title", "-"))).put("data", JsonArray.create().add(JsonArray.create().add("No Data to display"))).toString();
         }
     }
 
