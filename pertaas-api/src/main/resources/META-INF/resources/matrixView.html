@@ -124,7 +124,8 @@
                                    placeholder="Enter Job ID...">
                         </div>
                         <div class="col-sm-2 mb-3 mb-sm-0">
-                            <input type="button" class="btn btn-primary btn-user btn-block" onclick="fetchData()" value="Fetch Data"/>
+                            <input type="button" class="btn btn-primary btn-user btn-block" onclick="fetchData()"
+                                   value="Fetch Data"/>
                         </div>
                     </div>
                 </form>
@@ -208,6 +209,7 @@
 
 <script>
     function fetchData() {
+        $("#dataTableCard").toggle();
         console.log($("#jobID").val());
         $.ajax({
                 "async": true,
