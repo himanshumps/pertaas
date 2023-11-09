@@ -209,6 +209,11 @@
 
 <script>
     function fetchData() {
+        if ( $.fn.dataTable.isDataTable( '#tDataTable' ) ) {
+            console.log("It is a data table .. destroying now");
+            table = $('#tDataTable').DataTable();
+            table.destroy();
+        }
         console.log($("#jobID").val());
         $.ajax({
                 "async": true,
