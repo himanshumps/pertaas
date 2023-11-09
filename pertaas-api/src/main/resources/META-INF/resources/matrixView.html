@@ -22,7 +22,11 @@
 
     <!-- Custom styles for this page -->
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-
+    <style>
+        table.dataTable1 thead th {
+          white-space: nowrap
+        }
+    </style>
 </head>
 
 <body id="page-top">
@@ -120,49 +124,19 @@
                                    placeholder="Enter Job ID...">
                         </div>
                         <div class="col-sm-2 mb-3 mb-sm-0">
-                            <input type="submit" class="btn btn-primary btn-user btn-block"/>
+                            <input type="button" class="btn btn-primary btn-user btn-block" onclick="fetchData()" value="Fetch Data"/>
                         </div>
                     </div>
                 </form>
 
-                <!-- DataTable Example -->
-                <div class="card shadow mb-4">
+                <!-- DataTable -->
+                <div id="datatable1" class="card shadow mb-4 collapse">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">DataTable</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Scrape Metrics</h6>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Position</th>
-                                    <th>Office</th>
-                                    <th>Age</th>
-                                    <th>Start date</th>
-                                    <th>Salary</th>
-                                </tr>
-                                </thead>
-                                <tfoot>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Position</th>
-                                    <th>Office</th>
-                                    <th>Age</th>
-                                    <th>Start date</th>
-                                    <th>Salary</th>
-                                </tr>
-                                </tfoot>
-                                <tbody>
-                                <tr>
-                                    <td>Tiger Nixon</td>
-                                    <td>System Architect</td>
-                                    <td>Edinburgh</td>
-                                    <td>61</td>
-                                    <td>2011/04/25</td>
-                                    <td>$320,800</td>
-                                </tr>
-                                </tbody>
+                            <table class="table table-bordered" id="tDataTable" width="100%" cellspacing="0">
                             </table>
                         </div>
                     </div>
@@ -232,6 +206,38 @@
 <!-- Page level custom scripts -->
 <script src="js/demo/datatables-demo.js"></script>
 
+<script>
+    function fetchData() {
+        console.log($("#jobID").val());
+        $.ajax({
+                "async": true,
+                "crossDomain": true,
+                "url": "https://pertaas-api-himanshumps-1-dev.apps.sandbox-m3.1530.p1.openshiftapps.com/metrics/" + $("#jobID").val(),
+                "method": "GET"
+            })
+                .done(
+                    function (response) {
+                        console.log("success")
+                        console.log(response);
+                        var dataVar = JSON.parse(response);
+                        $('#tDataTable').DataTable({
+                            columnDefs: [{
+                              targets: 0,
+                              className: 'text-nowrap'
+                            }],
+                            columns: dataVar.columns,
+                            data: dataVar.data
+                        });
+                         $("#datatable1").toggle();
+                    }
+                )
+                .fail(function (response) {
+                    console.log("fail")
+                    console.log(response);
+                });
+
+    }
+</script>
 </body>
 
 </html>
