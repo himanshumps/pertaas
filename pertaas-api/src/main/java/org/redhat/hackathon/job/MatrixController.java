@@ -5,6 +5,9 @@ import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.json.JsonArray;
 import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.query.QueryOptions;
+import com.couchbase.client.java.query.QueryScanConsistency;
+import io.quarkus.logging.Log;
+import io.smallrye.common.annotation.RunOnVirtualThread;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -26,7 +29,7 @@ public class MatrixController {
 
     @GET
     @Path("/{jobId}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @RunOnVirtualThread
     public String getMetrics(String jobId) {
         String query = """
                     SELECT SPLIT(p.key_tx,"::")[1] AS scan_timestamp,
@@ -46,8 +49,10 @@ public class MatrixController {
                         AND p.registry = "StepMeterRegistry"
                     ORDER BY SPLIT(p.key_tx,"::")[1] ASC
                 """.replace("~BUCKET_NAME~", bucket.name()).replace("~JOB_ID~", jobId);
-        List<JsonObject> queryResult = cluster.query(query, QueryOptions.queryOptions().readonly(true))
+        Log.info(jobId + " | Query: " + query);
+        List<JsonObject> queryResult = cluster.query(query, QueryOptions.queryOptions().readonly(true).scanConsistency(QueryScanConsistency.REQUEST_PLUS))
                 .rowsAsObject();
+        Log.info(jobId + " | Result size: " + queryResult.size());
         if (queryResult.size() > 0) {
             // Create the column header for the table
             Set<String> columnHeaders = new LinkedHashSet<>();
@@ -173,4 +178,4 @@ public class MatrixController {
         return columnNamesToDisplay;
     }
 }
-}
+
