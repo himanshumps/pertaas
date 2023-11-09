@@ -209,6 +209,7 @@
 
 <script>
     function fetchData() {
+        $('#dataTableCard').removeClass('d-block');
         if ( $.fn.dataTable.isDataTable( '#tDataTable' ) ) {
             console.log("It is a data table .. destroying now");
             table = $('#tDataTable').DataTable();
@@ -235,6 +236,7 @@
                             columns: dataVar.columns,
                             data: dataVar.data
                         });
+                        $('#dataTableCard').addClass('d-block');
                     }
                 )
                 .fail(function (response) {
