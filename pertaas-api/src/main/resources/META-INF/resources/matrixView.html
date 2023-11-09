@@ -210,11 +210,12 @@
 <script>
     function fetchData() {
         $('#dataTableCard').removeClass('d-block');
-        /*if ( $.fn.dataTable.isDataTable( '#tDataTable' ) ) {
+        if ( $.fn.dataTable.isDataTable( '#tDataTable' ) ) {
             console.log("It is a data table .. destroying now");
             table = $('#tDataTable').DataTable();
             table.destroy();
-        }*/
+            $('#tDataTable tbody').empty();
+        }
         console.log($("#jobID").val());
         $.ajax({
                 "async": true,
