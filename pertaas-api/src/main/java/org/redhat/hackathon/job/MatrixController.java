@@ -90,52 +90,57 @@ public class MatrixController {
                                 rowValues.add(jsonObject.getString(columnName) == null ? "" : jsonObject.getString(columnName));
                         case String s when s.startsWith("request_sent ") -> {
                             AtomicReference<String> stringAtomicReference = new AtomicReference<>("");
-                            jsonObject.getArray("request_sent").forEach(o -> {
-                                JsonObject j = (JsonObject) o;
-                                if (j.getString(s) != null) {
-                                    stringAtomicReference.set(j.getString(columnName));
-                                }
-                            });
+                            if (jsonObject.getArray("request_sent") != null)
+                                jsonObject.getArray("request_sent").forEach(o -> {
+                                    JsonObject j = (JsonObject) o;
+                                    if (j.getString(s) != null) {
+                                        stringAtomicReference.set(j.getString(columnName));
+                                    }
+                                });
                             rowValues.add(stringAtomicReference.get());
                         }
                         case String s when s.startsWith("request_bytes ") -> {
                             AtomicReference<String> stringAtomicReference = new AtomicReference<>("");
-                            jsonObject.getArray("request_bytes").forEach(o -> {
-                                JsonObject j = (JsonObject) o;
-                                if (j.getString(s) != null) {
-                                    stringAtomicReference.set(j.getString(s));
-                                }
-                            });
+                            if (jsonObject.getArray("request_bytes") != null)
+                                jsonObject.getArray("request_bytes").forEach(o -> {
+                                    JsonObject j = (JsonObject) o;
+                                    if (j.getString(s) != null) {
+                                        stringAtomicReference.set(j.getString(s));
+                                    }
+                                });
                             rowValues.add(stringAtomicReference.get());
                         }
                         case String s when s.startsWith("response_received ") -> {
                             AtomicReference<String> stringAtomicReference = new AtomicReference<>("");
-                            jsonObject.getArray("response_received").forEach(o -> {
-                                JsonObject j = (JsonObject) o;
-                                if (j.getString(s) != null) {
-                                    stringAtomicReference.set(j.getString(columnName));
-                                }
-                            });
+                            if (jsonObject.getArray("response_received") != null)
+                                jsonObject.getArray("response_received").forEach(o -> {
+                                    JsonObject j = (JsonObject) o;
+                                    if (j.getString(s) != null) {
+                                        stringAtomicReference.set(j.getString(columnName));
+                                    }
+                                });
                             rowValues.add(stringAtomicReference.get());
                         }
                         case String s when s.startsWith("response_bytes ") -> {
                             AtomicReference<String> stringAtomicReference = new AtomicReference<>("");
-                            jsonObject.getArray("response_bytes").forEach(o -> {
-                                JsonObject j = (JsonObject) o;
-                                if (j.getString(s) != null) {
-                                    stringAtomicReference.set(j.getString(columnName));
-                                }
-                            });
+                            if (jsonObject.getArray("response_bytes") != null)
+                                jsonObject.getArray("response_bytes").forEach(o -> {
+                                    JsonObject j = (JsonObject) o;
+                                    if (j.getString(s) != null) {
+                                        stringAtomicReference.set(j.getString(columnName));
+                                    }
+                                });
                             rowValues.add(stringAtomicReference.get());
                         }
                         case String s when s.startsWith("response_time_percentile ") -> {
                             AtomicReference<String> stringAtomicReference = new AtomicReference<>("");
-                            jsonObject.getArray("response_time_percentile").forEach(o -> {
-                                JsonObject j = (JsonObject) o;
-                                if (j.getString(s) != null) {
-                                    stringAtomicReference.set(j.getString(columnName));
-                                }
-                            });
+                            if (jsonObject.getArray("response_time_percentile") != null)
+                                jsonObject.getArray("response_time_percentile").forEach(o -> {
+                                    JsonObject j = (JsonObject) o;
+                                    if (j.getString(s) != null) {
+                                        stringAtomicReference.set(j.getString(columnName));
+                                    }
+                                });
                             rowValues.add(stringAtomicReference.get());
                         }
                         default -> throw new IllegalStateException("Unexpected value: " + columnName);
