@@ -22,7 +22,7 @@ public class StartupAndStopEventBean {
     @Inject
     ClusterEnvironment clusterEnvironment;
 
-    /*void onStart(@Observes StartupEvent ev) {
+    void onStart(@Observes StartupEvent ev) {
         Log.info("The couchbase connection is being initiated");
         bucket.getClass();
         Log.info("The couchbase connection has being initiated");
@@ -34,5 +34,5 @@ public class StartupAndStopEventBean {
         } finally {
             clusterEnvironment.shutdown(Duration.ofMinutes(1));
         }
-    }*/
+    }
 }
