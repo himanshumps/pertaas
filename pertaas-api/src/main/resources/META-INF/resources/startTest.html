@@ -207,29 +207,33 @@
     $(document).ready(function () {
 
         $.ajax({
-                "async": true,
-                "crossDomain": true,
-                "url": "/images",
-                "method": "GET"
-            })
-                .done(
-                    function (response) {
-                        console.log("success")
-                        console.log(response);
-                        var jsonVar = JSON.parse(response);
-                        for(let i = 0; i < jsonVar.length; i++) {
-                            let obj = jsonVar[i];
-                            console.log(obj.id);
-                        }
-                    }
-                )
-                .fail(function (response) {
-                    console.log("fail")
+            "async": true,
+            "crossDomain": true,
+            "url": "/images",
+            "method": "GET"
+        })
+            .done(
+                function (response) {
+                    console.log("success")
                     console.log(response);
-                    var myModal = new bootstrap.Modal(document.getElementById("statusModal"), {});
-                    document.getElementById("modelBodyText").innerHTML = response;
-                    myModal.show();
-                });
+                    var jsonVar = JSON.parse(response);
+                    for (let i = 0; i < jsonVar.length; i++) {
+                        let obj = jsonVar[i];
+                        var opt = document.createElement("option");
+                        opt.innerHTML = obj.description;
+                        opt.value = obj.name;
+                        $("#select_image").add(opt);
+                        console.log(obj);
+                    }
+                }
+            )
+            .fail(function (response) {
+                console.log("fail")
+                console.log(response);
+                var myModal = new bootstrap.Modal(document.getElementById("statusModal"), {});
+                document.getElementById("modelBodyText").innerHTML = "There was an issue fetching the image name from imagestream";
+                myModal.show();
+            });
 
         $("form").submit(function () {
             // Check if the json is valid json or not
