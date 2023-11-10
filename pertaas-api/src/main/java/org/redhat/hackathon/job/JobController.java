@@ -96,7 +96,7 @@ public class JobController {
                 .endSpec()
                 .build();
         try {
-            tektonClient.v1().pipelineRuns().create(pipelineRunBuilderSpecNested);
+            tektonClient.v1().pipelineRuns().resource(pipelineRunBuilderSpecNested).create();
             return "The job with the ID: \"" + jobId + "\" has been triggered. Please keep a note of this job id which you can use to monitor the job.";
         } catch (Exception e) {
             Log.error("Issue while running the pipeline", e);
