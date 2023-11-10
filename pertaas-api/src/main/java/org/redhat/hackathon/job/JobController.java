@@ -42,6 +42,7 @@ public class JobController {
         CounterResult counterResult = bucket.defaultCollection().binary().increment("JOB_COUNTER", IncrementOptions.incrementOptions().initial(1));
         return "job-" + Long.valueOf(counterResult.content()).intValue();
     }
+
     @POST
     @Path("/create")
     @RunOnVirtualThread
