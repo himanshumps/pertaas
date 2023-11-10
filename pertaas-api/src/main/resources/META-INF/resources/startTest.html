@@ -110,22 +110,14 @@
 
                 <form class="user">
                     <div class="form-group">
+                        <label for="select_image">Select Job Template</label>
+                        <select class="form-control" id="select_image" name="select_image"></select>
+                    </div>
+                    <div class="form-group">
                         <label for="request_json">Request JSON</label>
                         <textarea class="form-control"
                                   id="request_json"
                                   rows="3">{"hostname":"pertaas-api-himanshumps-1-dev.apps.sandbox-m3.1530.p1.openshiftapps.com","port":443,"ssl":true,"maxConnections":10,"runDurationInSeconds":180,"requestPerSecond":10000000,"httpRequests":[{"method":"GET","uri":"/healthz","headers":null,"queryParams":null,"pathParams":null,"body":null}]}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="github_url">Github URL</label>
-                        <input type="text" class="form-control"
-                               id="github_url"
-                               value="https://github.com/himanshumps/pertaas-job.git">
-                    </div>
-                    <div class="form-group">
-                        <label for="revision">Branch / Tag / Revision</label>
-                        <input type="text" class="form-control"
-                               id="revision"
-                               value="main">
                     </div>
                     <div class="form-group">
                         <label for="stepDuration">Snapshot Duration (in seconds)</label>
@@ -213,6 +205,32 @@
 <script src="js/demo/chart-pie-demo.js"></script>
 <script>
     $(document).ready(function () {
+
+        $.ajax({
+                "async": true,
+                "crossDomain": true,
+                "url": "/images",
+                "method": "GET"
+            })
+                .done(
+                    function (response) {
+                        console.log("success")
+                        console.log(response);
+                        var jsonVar = JSON.parse(response);
+                        for(let i = 0; i < jsonVar.length; i++) {
+                            let obj = jsonVar[i];
+                            console.log(obj.id);
+                        }
+                    }
+                )
+                .fail(function (response) {
+                    console.log("fail")
+                    console.log(response);
+                    var myModal = new bootstrap.Modal(document.getElementById("statusModal"), {});
+                    document.getElementById("modelBodyText").innerHTML = response;
+                    myModal.show();
+                });
+
         $("form").submit(function () {
             // Check if the json is valid json or not
             if (!(isJsonString($("#request_json").val()))) {
