@@ -214,24 +214,18 @@
         })
             .done(
                 function (response) {
-                    console.log("success")
-                    console.log(response);
                     var jsonVar = JSON.parse(response);
                     for (let i = 0; i < jsonVar.length; i++) {
                         let obj = jsonVar[i];
-                        var opt = document.createElement("option");
-                        opt.innerHTML = obj.description;
-                        opt.value = obj.name;
-                        $("#select_image").add(opt);
+                        let displayText = obj.name.replace("pertaas-j-","");
+                        $("#select_image").append(`<option value="${obj.name}">${displayText} - ${obj.description}</option>`);
                         console.log(obj);
                     }
                 }
             )
             .fail(function (response) {
-                console.log("fail")
-                console.log(response);
                 var myModal = new bootstrap.Modal(document.getElementById("statusModal"), {});
-                document.getElementById("modelBodyText").innerHTML = "There was an issue fetching the image name from imagestream";
+                document.getElementById("modelBodyText").innerHTML = "There was an issue fetching the image name from image stream";
                 myModal.show();
             });
 
