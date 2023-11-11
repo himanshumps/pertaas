@@ -1,5 +1,5 @@
 FROM docker.io/maven:3.9.5-eclipse-temurin-21-alpine as build
-WORKDIR /app
+WORKDIR /apps
 ADD src src
 ADD pom.xml pom.xml
 RUN mvn clean install -B
