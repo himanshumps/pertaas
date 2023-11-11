@@ -1,15 +1,20 @@
-FROM docker.io/eclipse-temurin:21_35-jdk-ubi9-minimal
-# @sha256:f53c2fb071bb78506e568290025a7ab634cf219f41578c1657f202cb077f8536
+FROM docker.io/maven:3.9.5-eclipse-temurin-21-alpine as build
+WORKDIR /app
+ADD src src
+ADD pom.xml pom.xml
+RUN mvn clean install -B
+
+FROM docker.io/eclipse-temurin:21.0.1_12-jdk-ubi9-minimal
 
 ENV LANGUAGE='en_US:en'
 
 WORKDIR /deployments
 
 # We make four distinct layers so if there are application changes the library layers can be re-used
-COPY --chown=185 target/quarkus-app/lib/ ./lib/
-COPY --chown=185 target/quarkus-app/*.jar ./
-COPY --chown=185 target/quarkus-app/app/ ./app/
-COPY --chown=185 target/quarkus-app/quarkus/ ./quarkus/
+COPY --from=build --chown=185 /apps/target/quarkus-app/lib/ ./lib/
+COPY --from=build --chown=185 /apps/target/quarkus-app/*.jar ./
+COPY --from=build --chown=185 /apps/target/quarkus-app/app/ ./app/
+COPY --from=build --chown=185 /apps/target/quarkus-app/quarkus/ ./quarkus/
 
 EXPOSE 8080
 USER 185
