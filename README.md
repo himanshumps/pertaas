@@ -178,6 +178,17 @@ We have created two tekton pipelines to create the job using helm and custom ima
 
 ```bash
 oc apply -f - <<EOF
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: tekton1
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
 apiVersion: tekton.dev/v1
 kind: Task
 metadata:
