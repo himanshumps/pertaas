@@ -92,7 +92,7 @@ public class JobController {
                 .withName("ram")
                 .withValue(new ParamValue(ram))
                 .endParam()
-                .withWorkspaces(new WorkspaceBindingBuilder().withName("emptydir").withNewPersistentVolumeClaim("tekton1", false).build(),
+                .withWorkspaces(new WorkspaceBindingBuilder().withName("emptydir").withNewPersistentVolumeClaim("tekton-pvc", false).build(),
                         new WorkspaceBindingBuilder().withName("configmap_settings").withEmptyDir(new EmptyDirVolumeSource()).build())
                 .endSpec()
                 .build();
