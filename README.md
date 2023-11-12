@@ -181,7 +181,7 @@ oc apply -f - <<EOF
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: tekton1
+  name: tekton-pvc
 spec:
   accessModes:
     - ReadWriteOnce
