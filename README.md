@@ -534,11 +534,8 @@ EOF
 The application can be deployed as knative application or as a deployment. The startup time for the application is around 3 seconds as the couchbase cluster and bucket initialization delays the startup.
 
 ```bash
-# Deploy the app
 oc new-app https://github.com/himanshumps/pertaas.git --context-dir=pertaas-api --strategy=docker --name="pertaas-api"
-# Add the secret to the deployment
 oc set env deployment/pertaas-api --from secret/couchbase-secret
-# Expose the ssl route with edge termination
 oc create route edge pertaas-api --service=pertaas-api --port=8080
 ```
 
