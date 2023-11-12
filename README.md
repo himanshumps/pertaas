@@ -166,16 +166,7 @@ oc get svc couchbasedb1 -o go-template --template='{{.metadata.name}}.{{.metadat
 
 Replace `<Internal service name>` with the service name received from above oc command
 ```bash
-oc create -f - <<EOF
-apiVersion: v1
-metadata:
-  name: couchbase-secret
-data:
-  COUCHBASE_CONNECTION_STRING: couchbase://<Internal service name>
-  COUCHBASE_USER: pertaas_user
-  COUCHBASE_PASSWORD: qHogxn5e
-  COUCHBASE_BUCKET: pertaas
-EOF
+oc create secret generic couchbase-secret --from-literal=COUCHBASE_CONNECTION_STRING=couchbase://<Internal service name> --from-literal=COUCHBASE_USER=pertaas_user --from-literal=COUCHBASE_PASSWORD=qHogxn5e --from-literal=COUCHBASE_BUCKET=pertaas
 ```
 
 ### Tekton pipeline
