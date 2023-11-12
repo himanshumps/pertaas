@@ -169,6 +169,9 @@ Replace `<Internal service name>` with the service name received from above oc c
 oc create secret generic couchbase-secret --from-literal=COUCHBASE_CONNECTION_STRING=couchbase://<Internal service name> --from-literal=COUCHBASE_USER=pertaas_user --from-literal=COUCHBASE_PASSWORD=qHogxn5e --from-literal=COUCHBASE_BUCKET=pertaas
 ```
 
+<img width="835" alt="image" src="https://github.com/himanshumps/pertaas/assets/22702284/a18dbbb1-5a1c-46ce-a9aa-1003414af8e2">
+
+
 ### Tekton pipeline
 
 We have created two tekton pipelines to create the job using helm and custom image creation for the pertaas-job application. $ is escaped by \$ in below oc command for it to be ran from terminal
