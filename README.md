@@ -157,7 +157,7 @@ EOF
 ```
 ### Secret for couchbase
 
-Create the couchbase secret. 
+Create the couchbase secret.
 
 Get the svc details for the couchbasedb1 and provide it as part of connection string
 
@@ -533,6 +533,20 @@ spec:
   - name: emptydir
   - name: configmap_settings
 EOF
+```bash
+
+
+### Secret for couchbase
+
+Create the couchbase secret. 
+
+Get the svc details for the couchbasedb1 and provide it as part of connection string
+
+```bash
+oc get svc couchbasedb1 -o go-template --template='{{.metadata.name}}.{{.metadata.namespace}}.svc.cluster.local{{println}}'
+```
+
+Replace `<Internal service name>` with the service name received from above oc command
 ```bash
 oc create -f - <<EOF
 apiVersion: v1
