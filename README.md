@@ -93,7 +93,6 @@ kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: tekton-pipeline-run-role
-  namespace: himanshumps-1-dev
 rules:
   - verbs:
       - create
