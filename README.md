@@ -171,10 +171,10 @@ oc create secret generic couchbase-secret --from-literal=COUCHBASE_CONNECTION_ST
 
 ### Tekton pipeline
 
-We have created two tekton pipelines to create the job using helm and custom image creation for the pertaas-job application
+We have created two tekton pipelines to create the job using helm and custom image creation for the pertaas-job application. $ is escaped by \$ in below oc command for it to be ran from terminal
 
 ```bash
-oc create -f - <<EOF
+oc apply -f - <<EOF
 apiVersion: tekton.dev/v1
 kind: Task
 metadata:
@@ -206,14 +206,14 @@ spec:
     type: string
   steps:
   - computeResources: {}
-    image: $(params.HELM_IMAGE)
+    image: \$(params.HELM_IMAGE)
     name: helm-deploy
     script: |
       helm repo add pertaas-job-helm-repository https://himanshumps.github.io/pertaas-helm/
 
 
-      helm install --set jobId="$(params.jobId)" --set-literal requestJson='$(params.requestJson)' --set-string stepDuration="$(params.stepDuration)" --set-string cpu="$(params.cpu)" --set-string memory="$(params.memory)" --debug $(params.jobId) pertaas-job-helm-repository/$(params.helmChart)
-    workingDir: $(workspaces.source.path)
+      helm install --set jobId="\$(params.jobId)" --set-literal requestJson='\$(params.requestJson)' --set-string stepDuration="\$(params.stepDuration)" --set-string cpu="\$(params.cpu)" --set-string memory="\$(params.memory)" --debug \$(params.jobId) pertaas-job-helm-repository/\$(params.helmChart)
+    workingDir: \$(workspaces.source.path)
   workspaces:
   - name: source
 ---
@@ -234,7 +234,7 @@ spec:
     computeResources: {}
     image: alpine
     name: download-go-binary
-    workingDir: $(workspaces.source.path)
+    workingDir: \$(workspaces.source.path)
   workspaces:
   - description: A workspace that needs to be dumped.
     name: source
@@ -259,9 +259,9 @@ spec:
     script: |
       #!/bin/sh
       echo "start execution"
-      /workspace/source/pertaas-couchbase-go-dev-linux-amd64 -setJobId "$(params.jobId)" -setMessage "$(params.message)"
+      /workspace/source/pertaas-couchbase-go-dev-linux-amd64 -setJobId "\$(params.jobId)" -setMessage "\$(params.message)"
       echo "execution completed"
-    workingDir: $(workspaces.source.path)
+    workingDir: \$(workspaces.source.path)
   workspaces:
   - description: A workspace that needs to be dumped.
     name: source
@@ -290,17 +290,17 @@ spec:
   - name: deploy-job-using-helm
     params:
     - name: jobId
-      value: $(params.jobId)
+      value: \$(params.jobId)
     - name: helmChart
-      value: $(params.helmChart)
+      value: \$(params.helmChart)
     - name: requestJson
-      value: $(params.requestJson)
+      value: \$(params.requestJson)
     - name: stepDuration
-      value: $(params.stepDuration)
+      value: \$(params.stepDuration)
     - name: cpu
-      value: $(params.cpu)
+      value: \$(params.cpu)
     - name: memory
-      value: $(params.memory)
+      value: \$(params.memory)
     - name: HELM_IMAGE
       value: docker.io/dtzar/helm-kubectl:3.13.1
     taskRef:
@@ -344,7 +344,7 @@ spec:
   - name: update-couchbase-start-pipeline
     params:
     - name: jobId
-      value: $(params.imageName)
+      value: \$(params.imageName)
     - name: message
       value: Started the pipeline
     runAfter:
@@ -358,9 +358,9 @@ spec:
   - name: git-clone
     params:
     - name: url
-      value: $(params.githubUrl)
+      value: \$(params.githubUrl)
     - name: revision
-      value: $(params.gitRevision)
+      value: \$(params.gitRevision)
     - name: refspec
       value: ""
     - name: submodules
@@ -372,7 +372,7 @@ spec:
     - name: crtFileName
       value: ca-bundle.crt
     - name: subdirectory
-      value: $(params.imageName)
+      value: \$(params.imageName)
     - name: sparseCheckoutDirectories
       value: ""
     - name: deleteExisting
@@ -398,7 +398,7 @@ spec:
   - name: update-couchbase-maven-build
     params:
     - name: jobId
-      value: $(params.imageName)
+      value: \$(params.imageName)
     - name: message
       value: Started the maven build
     runAfter:
@@ -417,7 +417,7 @@ spec:
       value:
       - install
       - -f
-      - $(params.imageName)/pom.xml
+      - \$(params.imageName)/pom.xml
       - -B
       - -Dmaven.repo.local=.m2/repository/
     - name: MAVEN_MIRROR_URL
@@ -453,7 +453,7 @@ spec:
   - name: update-couchbase-build-completed
     params:
     - name: jobId
-      value: $(params.imageName)
+      value: \$(params.imageName)
     - name: message
       value: Maven build completed
     runAfter:
@@ -467,15 +467,15 @@ spec:
   - name: buildah
     params:
     - name: IMAGE
-      value: image-registry.openshift-image-registry.svc:5000/$(context.pipelineRun.namespace)/$(params.imageName)
+      value: image-registry.openshift-image-registry.svc:5000/\$(context.pipelineRun.namespace)/\$(params.imageName)
     - name: BUILDER_IMAGE
       value: registry.redhat.io/rhel8/buildah@sha256:00795fafdab9bbaa22cd29d1faa1a01e604e4884a2c935c1bf8e3d1f0ad1c084
     - name: STORAGE_DRIVER
       value: vfs
     - name: DOCKERFILE
-      value: $(params.imageName)/Dockerfile
+      value: \$(params.imageName)/Dockerfile
     - name: CONTEXT
-      value: $(params.imageName)/
+      value: \$(params.imageName)/
     - name: TLSVERIFY
       value: "true"
     - name: FORMAT
@@ -485,7 +485,7 @@ spec:
     - name: SKIP_PUSH
       value: "false"
     - name: BUILD_EXTRA_ARGS
-      value: --label pertaas-image-description="$(params.image_description)"
+      value: --label pertaas-image-description="\$(params.image_description)"
     runAfter:
     - update-couchbase-build-completed
     taskRef:
@@ -497,7 +497,7 @@ spec:
   - name: update-couchbase-buildah-completed
     params:
     - name: jobId
-      value: $(params.imageName)
+      value: \$(params.imageName)
     - name: message
       value: Image created and pushed to openshift imagestream
     runAfter:
@@ -511,7 +511,7 @@ spec:
   - name: openshift-client
     params:
     - name: SCRIPT
-      value: oc annotate is/$(params.imageName) "pertaas-image-description"="$(params.image_description)"
+      value: oc annotate is/\$(params.imageName) "pertaas-image-description"="\$(params.image_description)"
     - name: VERSION
       value: latest
     runAfter:
