@@ -525,7 +525,7 @@ spec:
   - name: openshift-client
     params:
     - name: SCRIPT
-      value: oc annotate is/\$(params.imageName) "pertaas-image-description"="\$(params.image_description)"
+      value: oc annotate --overwrite is/\$(params.imageName) "pertaas-image-description"="\$(params.image_description)"
     - name: VERSION
       value: latest
     runAfter:
