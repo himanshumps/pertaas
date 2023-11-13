@@ -118,9 +118,12 @@
 
                 <form class="user">
 
-                        <div class="form-group row">
-                            <label for="submitButton" class="col-sm-4 col-form-label">Generate a job ID to be ued in helm job or CI/CD pipeline: </label> <input id="submitButton" class="col-sm-3 col-form-label btn btn-primary btn-user btn-block" type="submit" value="Generate"/>
-                        </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label" for="submitButton">Generate a job ID to be ued in helm
+                            job or CI/CD pipeline: </label> <input class="col-sm-3 col-form-label btn btn-primary btn-user btn-block"
+                                                                   id="submitButton"
+                                                                   type="submit" value="Generate"/>
+                    </div>
                 </form>
                 <div class="card shadow mb-4 d-none" id="generateJobIDCard">
                     <div class="card-header py-3">
@@ -196,6 +199,7 @@
                 });
             return false;
         });
+    });
 
 </script>
 </body>
