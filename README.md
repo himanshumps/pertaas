@@ -610,6 +610,8 @@ curl '<pertaas-api route>/customImage/create' \
   --compressed
 ```
 
+It takes around 3 minute to build and push the image to openshift image registry
+
 ### Import the Helm repository
 
 ```bash
