@@ -599,3 +599,29 @@ oc set env deployment/pertaas-api --from secret/couchbase-secret
 oc create route edge pertaas-api --service=pertaas-api --port=8080
 ```
 
+Access the application by route. Click on create custom image and submit with default values to create the job image using tekton pielines.
+
+Or execute this curl command by replacing the `<pertaas-api route>` with the route details.
+
+```bash
+curl '<pertaas-api route>/customImage/create' \
+  -XPOST \
+  --data-raw '{"image_name":"pertaas-j-basic-test","image_description":"This is a basic test image which takes the request json as an input along with other parameters. To know more about the model and the input, please refer main branch at https://github.com/himanshumps/pertaas-job.git","github_url":"https://github.com/himanshumps/pertaas-job.git","github_revision":"main","override_image":true}' \
+  --compressed
+```
+
+### Import the Helm repository
+
+```bash
+oc create -f - <<EOF
+apiVersion: helm.openshift.io/v1beta1
+kind: ProjectHelmChartRepository
+metadata:
+  name: pertaas-job-helm-repository
+spec:
+  connectionConfig:
+    url: 'https://himanshumps.github.io/pertaas-helm/'
+  description: pertaas-job-helm-repository
+  name: pertaas-job-helm-repository
+EOF
+```
