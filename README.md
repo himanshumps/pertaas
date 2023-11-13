@@ -634,7 +634,6 @@ EOF
 ```bash
 oc delete pod --field-selector=status.phase==Succeeded
 oc delete pod --field-selector=status.phase==Failed
-oc delete jobs --all
 tkn pipelinerun delete --all
 helm ls --all --short | xargs -L1 helm delete
 ```
