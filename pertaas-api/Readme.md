@@ -3,7 +3,7 @@
 ### Build strategy
 It uses Dockerfile to build the final image.
 
-The builder image used is maven:3.9.5-eclipse-temurin-21-alpine and the runtime image used is JSK 21 from eclipse temurin running on ubi 9 (eclipse-temurin:21.0.1_12-jdk-ubi9-minimal)
+The builder image used is maven:3.9.5-eclipse-temurin-21-alpine and the runtime image used is JDK 21 from eclipse temurin running on ubi 9 minimal(eclipse-temurin:21.0.1_12-jdk-ubi9-minimal)
 
 ### API endpoints
 
