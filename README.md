@@ -581,7 +581,11 @@ spec:
       pertaas-job: 'true'
 EOF
 ```
+Expose the prometheus route.
 
+```bash
+oc expose service sample-monitoring-stack-prometheus
+```
 
 ### PerTaaS API Application
 
