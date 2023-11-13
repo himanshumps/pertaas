@@ -627,3 +627,14 @@ spec:
   name: pertaas-job-helm-repository
 EOF
 ```
+
+
+### Some commands to cleanup the developer sandbox and release resource
+
+```bash
+oc delete pod --field-selector=status.phase==Succeeded
+oc delete pod --field-selector=status.phase==Failed
+oc delete jobs --all
+tkn pipelinerun delete --all
+helm ls --all --short | xargs -L1 helm delete
+```
