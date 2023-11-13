@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Path("/metrics")
-public class MatrixController {
+public class MetricsController {
 
     @Inject
     Cluster cluster;
@@ -25,9 +25,9 @@ public class MatrixController {
     Bucket bucket;
 
     @GET
-    @Path("/{jobId}")
+    @Path("/{registryType}/{jobId}")
     @RunOnVirtualThread
-    public String getMetrics(String jobId) {
+    public String getMetrics(String registryType, String jobId) {
         String query = """
                     SELECT SPLIT(p.key_tx,"::")[1] AS scan_timestamp,
                            TO_STRING(p.`vertx.http.client.active.connections`[0].`value`) active_connections,
@@ -43,9 +43,9 @@ public class MatrixController {
                            ARRAY {"response_received Code:" || v.`tags`.`code` || " Method:" || v.`tags`.`method` || " Path:" || v.`tags`.`path`: TO_STRING(v.`count`)} FOR v IN p.`vertx.http.client.responses` END response_received
                     FROM `~BUCKET_NAME~` p
                     WHERE p.key_tx LIKE "~JOB_ID~::%"
-                        AND p.registry = "StepMeterRegistry"
+                        AND p.registry = "~METER_REGISTRY~"
                     ORDER BY SPLIT(p.key_tx,"::")[1] ASC
-                """.replace("~BUCKET_NAME~", bucket.name()).replace("~JOB_ID~", jobId);
+                """.replace("~BUCKET_NAME~", bucket.name()).replace("~JOB_ID~", jobId).replace("~METER_REGISTRY~", registryType);
         Log.info(jobId + " | Query: " + query);
         List<JsonObject> queryResult = cluster.query(query, QueryOptions.queryOptions().readonly(true).scanConsistency(QueryScanConsistency.REQUEST_PLUS))
                 .rowsAsObject();
@@ -54,7 +54,9 @@ public class MatrixController {
             // Create the column header for the table
             Set<String> columnHeaders = new LinkedHashSet<>();
             columnHeaders.add("scan_timestamp");
-            columnHeaders.add("active_connections");
+           if(registryType.equalsIgnoreCase("StepMeterRegistry")) {
+               columnHeaders.add("active_connections");
+           }
 
             for (JsonObject jsonObject : queryResult) {
                 if (jsonObject.getArray("request_sent") != null)

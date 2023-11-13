@@ -21,10 +21,6 @@ import jakarta.ws.rs.Path;
 @Path("/job")
 public class JobController {
 
-
-    @Inject
-    TektonClient tektonClient;
-
     @Inject
     OpenShiftClient openShiftClient;
 
@@ -36,70 +32,6 @@ public class JobController {
     public String generateJobId() {
         CounterResult counterResult = bucket.defaultCollection().binary().increment("JOB_COUNTER", IncrementOptions.incrementOptions().initial(1));
         return "job-" + Long.valueOf(counterResult.content()).intValue();
-    }
-
-    @POST
-    @Path("/create")
-    @RunOnVirtualThread
-    public String createJobViaTektonPipeline(String jsonString) {
-        Log.info("Received: " + jsonString);
-        CounterResult counterResult = bucket.defaultCollection().binary().increment("JOB_COUNTER", IncrementOptions.incrementOptions().initial(1));
-        String jobId = "job-" + Long.valueOf(counterResult.content()).intValue();
-        JsonObject jsonObject = new JsonObject(jsonString);
-        String stepDuration = jsonObject.getString("stepDuration", "10");
-        String github_url = jsonObject.getString("github_url");
-        String revision = jsonObject.getString("revision");
-        Object requestJson = jsonObject.getValue("request_json");
-        String cpu = jsonObject.getString("cpu", "1000");
-        String ram = jsonObject.getString("ram", "1024");
-        PipelineRun pipelineRunBuilderSpecNested = new PipelineRunBuilder()
-                .withNewMetadata().withName(jobId + "-run")
-                .endMetadata()
-                .withNewSpec()
-                .withNewPipelineRef()
-                .withName("job-pipeline")
-                .endPipelineRef()
-                .addNewParam()
-                .withName("jobId")
-                .withValue(new ParamValue(jobId))
-                .endParam()
-                .addNewParam()
-                .withName("requestJson")
-                .withValue(new ParamValue(requestJson.toString()))
-                .endParam()
-                .addNewParam()
-                .withName("gitRepoUrl")
-                .withValue(new ParamValue(github_url))
-                .endParam()
-                .addNewParam()
-                .withName("gitRevision")
-                .withValue(new ParamValue(revision))
-                .endParam()
-                .addNewParam()
-                .withName("stepDuration")
-                .withValue(new ParamValue(stepDuration))
-                .endParam()
-                .addNewParam()
-                .withName("cpu")
-                .withValue(new ParamValue(cpu))
-                .endParam()
-                .addNewParam()
-                .withName("ram")
-                .withValue(new ParamValue(ram))
-                .endParam()
-                .withWorkspaces(new WorkspaceBindingBuilder().withName("emptydir").withNewPersistentVolumeClaim("tekton-pvc", false).build(),
-                        new WorkspaceBindingBuilder().withName("configmap_settings").withEmptyDir(new EmptyDirVolumeSource()).build())
-                .endSpec()
-                .build();
-        try {
-            tektonClient.v1().pipelineRuns().resource(pipelineRunBuilderSpecNested).create();
-            return "The job with the ID: \"" + jobId + "\" has been triggered. Please keep a note of this job id which you can use to monitor the job.";
-        } catch (Exception e) {
-            Log.error("Issue while running the pipeline", e);
-            return "There was some issue while running the pipeline.";
-        }
-
-
     }
 
     @GET

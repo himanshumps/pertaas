@@ -104,7 +104,7 @@
             <!-- Topbar -->
             <nav class="navbar-expand navbar-light bg-white mb-5 p-2 static-top shadow">
                 <div>
-                    <h3 class="text-center">Create Custom Performance Test Image</h3>
+                    <h3 class="text-center">Custom Performance Test</h3>
                 </div>
 
             </nav>
@@ -122,13 +122,18 @@
                                 <span class="input-group-text" id="basic-addon3">pertaas-j-</span>
                             </div>
                             <!-- set the lenth as 200 as we need additional bytes for storing it in couchbase -->
-                            <input type="text" class="form-control" id="image_name" aria-describedby="basic-addon3" maxlength="200" required>
+                            <input type="text" class="form-control" id="image_name" aria-describedby="basic-addon3" maxlength="200" value="basic-test" required>
                         </div>
                     </div>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="override_image"  aria-describedby="basic-addon3" name="override_image" value="Override existing image">
+                        <label for="override_image" class="form-check-label">Override</label>
+                    </div>
+                    <div style="margin-bottom: 10px"></div>
                     <div class="form-group">
                         <label for="image_description">Image Description</label>
                         <div class="input-group mb-3">
-                            <textarea class="form-control" id="image_description" aria-describedby="basic-addon3" rows="3"  placeholder="Please provide image description" required></textarea>
+                            <textarea class="form-control" id="image_description" aria-describedby="basic-addon3" rows="3" required placeholder="Please provide image description">This is a basic test image which takes the request json as an input along with other parameters. To know more about the model and the input, please refer main branch at https://github.com/himanshumps/pertaas-job.git</textarea>
                         </div>
                     </div>
                     <div class="form-group">
@@ -203,12 +208,6 @@
 <!-- Custom scripts for all pages-->
 <script src="js/sb-admin-2.min.js"></script>
 
-<!-- Page level plugins -->
-<script src="vendor/chart.js/Chart.min.js"></script>
-
-<!-- Page level custom scripts -->
-<script src="js/demo/chart-area-demo.js"></script>
-<script src="js/demo/chart-pie-demo.js"></script>
 <script>
     $(document).ready(function () {
         $("form").submit(function () {
@@ -222,6 +221,7 @@
             postJson.image_description =  $("#image_description").val();
             postJson.github_url = $("#github_url").val();
             postJson.github_revision = $("#revision").val();
+            postJson.override_image = $("#override_image").prop('checked')
             console.log(JSON.stringify(postJson));
             $.ajax({
                 "async": true,

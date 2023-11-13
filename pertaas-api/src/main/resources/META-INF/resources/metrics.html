@@ -109,18 +109,15 @@
         <div id="content">
 
             <!-- Topbar -->
-            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
-                <h1>PerTaaS: Performance Testing as a Service</h1>
-
+            <nav class="navbar-expand navbar-light bg-white mb-5 p-2 static-top shadow">
+                <div>
+                    <h3 class="text-center">Metrics</h3>
+                </div>
             </nav>
             <!-- End of Topbar -->
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
-
-                <!-- Page Heading -->
-                <h1 class="h3 mb-2 text-gray-800">Metrics</h1>
 
                 <form class="user">
                     <div class="form-group row">
@@ -129,23 +126,43 @@
                                    id="jobID"
                                    placeholder="Enter Job ID...">
                         </div>
-                    </div>
-                    <div class="form-group row">
                         <div class="col-sm-2 mb-3 mb-sm-0">
                             <input type="button" class="btn btn-primary btn-user btn-block" onclick="fetchData()"
                                    value="Fetch Data"/>
                         </div>
                     </div>
                 </form>
+                <div id="requestJsonCard" class="card shadow mb-4 d-none">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Request Json</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <p id="request_json"/>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- DataTable -->
-                <div id="dataTableCard" class="card shadow mb-4 d-none">
+                <div id="summaryMetricsCard" class="card shadow mb-4 d-none">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Summary Metrics</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="tSummaryMetrics" style="width: 100%; cellspacing: 0">
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- DataTable -->
+                <div id="stepMetricsCard" class="card shadow mb-4 d-none">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Scrape Metrics</h6>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered" id="tDataTable" width="100%" cellspacing="0">
+                            <table class="table table-bordered" id="tStepMetrics" style="width: 100%; cellspacing: 0">
                             </table>
                         </div>
                     </div>
@@ -198,18 +215,26 @@
 
 <script>
     function fetchData() {
-        $('#dataTableCard').removeClass('d-block');
-        if ( $.fn.dataTable.isDataTable( '#tDataTable' ) ) {
+        $('#requestJsonCard').removeClass('d-block');
+        $('#stepMetricsCard').removeClass('d-block');
+        $('#summaryMetricsCard').removeClass('d-block');
+        if ( $.fn.dataTable.isDataTable( '#tStepMetrics' ) ) {
             console.log("It is a data table .. destroying now");
-            table = $('#tDataTable').DataTable();
+            table = $('#tStepMetrics').DataTable();
             table.destroy();
-            $('#tDataTable').empty();
+            $('#tStepMetrics').empty();
+        }
+        if ( $.fn.dataTable.isDataTable( '#tSummaryMetrics' ) ) {
+            console.log("It is a data table .. destroying now");
+            table = $('#tSummaryMetrics').DataTable();
+            table.destroy();
+            $('#tSummaryMetrics').empty();
         }
         console.log($("#jobID").val());
         $.ajax({
                 "async": true,
                 "crossDomain": true,
-                "url": "/metrics/" + $("#jobID").val(),
+                "url": "/metrics/StepMeterRegistry/" + $("#jobID").val(),
                 "method": "GET"
             })
                 .done(
@@ -218,7 +243,7 @@
                         console.log(response);
                         var dataVar = JSON.parse(response);
                         console.log(dataVar);
-                        $('#tDataTable').DataTable({
+                        $('#tStepMetrics').DataTable({
                             destroy: true,
                             columnDefs: [{
                               targets: 0,
@@ -227,13 +252,13 @@
                              data: dataVar.data,
                              columns: dataVar.columns
                         });
-                        $('#dataTableCard').addClass('d-block');
+                        $('#stepMetricsCard').addClass('d-block');
                     }
                 )
                 .fail(function (response) {
                     console.log("fail")
                     console.log(response);
-                    $('#tDataTable').DataTable({
+                    $('#tStepMetrics').DataTable({
                             destroy: true,
                             columnDefs: [{
                               targets: 0,
@@ -242,7 +267,72 @@
                              data: [["<p style=\"color: red\">There was an error fetching the data for the job.</p>"]],
                              columns: [{"title": "Error"}]
                         });
-                        $('#dataTableCard').addClass('d-block');
+                        $('#stepMetricsCard').addClass('d-block');
+                });
+                $.ajax({
+                "async": true,
+                "crossDomain": true,
+                "url": "/metrics/SimpleMeterRegistry/" + $("#jobID").val(),
+                "method": "GET"
+            })
+                .done(
+                    function (response) {
+                        console.log("success")
+                        console.log(response);
+                        var dataVar = JSON.parse(response);
+                        console.log(dataVar);
+                        $('#tSummaryMetrics').DataTable({
+                            destroy: true,
+                            columnDefs: [{
+                              targets: 0,
+                              className: 'text-nowrap'
+                            }],
+                             data: dataVar.data,
+                             columns: dataVar.columns,
+                             bPaginate: false,
+                             bInfo: false,
+                             searching: false,
+                             paging: false,
+                             info: false
+                        });
+                        $('#summaryMetricsCard').addClass('d-block');
+                    }
+                )
+                .fail(function (response) {
+                    console.log("fail")
+                    console.log(response);
+                    $('#tSummaryMetrics').DataTable({
+                            destroy: true,
+                            columnDefs: [{
+                              targets: 0,
+                              className: 'text-nowrap'
+                            }],
+                             data: [["<p style=\"color: red\">There was an error fetching the data for the job.</p>"]],
+                             columns: [{"title": "Error"}]
+                        });
+                        $('#summaryMetricsCard').addClass('d-block');
+                });
+
+
+                $.ajax({
+                "async": true,
+                "crossDomain": true,
+                "url": "/getDocument/" + $("#jobID").val() + "::REQUEST_JSON",
+                "method": "GET"
+            })
+                .done(
+                    function (response) {
+                        console.log("success")
+                        console.log(response);
+                        $("p#request_json").text(response);
+                        $('#requestJsonCard').addClass('d-block');
+                    }
+                )
+                .fail(function (response) {
+                    console.log("fail")
+                    console.log(response);
+                    $("p#request_json").text(response);
+                   $('#requestJsonCard').addClass('d-block');
                 });
 
     }

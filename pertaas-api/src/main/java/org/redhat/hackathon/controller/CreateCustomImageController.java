@@ -37,23 +37,24 @@ public class CreateCustomImageController {
         String imageDescription = jsonObject.getString("image_description");
         String githubUrl = jsonObject.getString("github_url");
         String githubRevision = jsonObject.getString("github_revision");
+        Boolean overrideImage = jsonObject.getBoolean("override_image");
         AtomicReference<String> imageAnnotationDetails = new AtomicReference<>("");
         Long count = openShiftClient.imageStreams().list().getItems()
                 .stream()
                 .filter(imageStream -> {
                     Log.info("The image name is: " + imageStream);
                     Log.info("imageStream.getMetadata().getName(): " + imageStream.getMetadata().getName());
-                    if(imageStream.getMetadata().getName().equalsIgnoreCase(imageName)) {
+                    if (imageStream.getMetadata().getName().equalsIgnoreCase(imageName)) {
                         imageAnnotationDetails.set(imageStream.getMetadata().getAnnotations().get("pertaas-image-description"));
                     }
                     return imageStream.getMetadata().getName().equalsIgnoreCase(imageName);
                 })
                 .count();
-        if (count.intValue() > 0) {
-            return "The image with the name already exists. Please select another name for the image. The existing image is with the description as <br/><br/>" + imageAnnotationDetails.get();
+        if (overrideImage.equals(Boolean.FALSE) && count.intValue() > 0) {
+            return "The image with the name already exists. Please select another name or override the image by selecting the checkbox. The existing image is with the description as <br/><br/>" + imageAnnotationDetails.get();
         }
         CounterResult counterResult = bucket.defaultCollection().binary().increment("CUSTOM_IMAGE_COUNTER", IncrementOptions.incrementOptions().initial(1));
-        String pipelineRunId = "pertaas-custom-image-" + Long.valueOf(counterResult.content()).intValue() + "-run";
+        String pipelineRunId = "ci-" + imageName + "-" + Long.valueOf(counterResult.content()).intValue() + "-run";
         PipelineRun pipelineRunBuilderSpecNested = new PipelineRunBuilder()
                 .withNewMetadata().withName(pipelineRunId)
                 .endMetadata()
@@ -85,5 +86,8 @@ public class CreateCustomImageController {
         return "The request for custom image creation has been accepted. The new image would be available after 5 minutes if there are no failures. Please share the ID: \"" + pipelineRunId + "\" with openshift administrator in case of any issues.";
     }
 
-    record ImageDetails(String imageName, String imageDetails){};
+    record ImageDetails(String imageName, String imageDetails) {
+    }
+
+    ;
 }
