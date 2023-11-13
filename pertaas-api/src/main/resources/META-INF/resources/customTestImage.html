@@ -4,10 +4,10 @@
 <head>
 
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta content="" name="description">
+    <meta content="" name="author">
 
     <title>PerTaaS - Start Test</title>
 
@@ -33,7 +33,7 @@
         <!-- Sidebar - Brand -->
         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
             <div class="sidebar-brand-icon">
-                <img class="sidebar-card-illustration mb-2" width="70%" height="70%" src="img/text.png">
+                <img class="sidebar-card-illustration mb-2" height="70%" src="img/text.png" width="70%">
             </div>
         </a>
 
@@ -96,7 +96,7 @@
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
+    <div class="d-flex flex-column" id="content-wrapper">
 
         <!-- Main Content -->
         <div id="content">
@@ -122,37 +122,37 @@
                                 <span class="input-group-text" id="basic-addon3">pertaas-j-</span>
                             </div>
                             <!-- set the lenth as 200 as we need additional bytes for storing it in couchbase -->
-                            <input type="text" class="form-control" id="image_name" aria-describedby="basic-addon3"
-                                   maxlength="200" value="basic-test" required>
+                            <input aria-describedby="basic-addon3" class="form-control" id="image_name" maxlength="200"
+                                   required type="text" value="basic-test">
                         </div>
                     </div>
                     <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="override_image"
-                               aria-describedby="basic-addon3" name="override_image" value="Override existing image">
-                        <label for="override_image" class="form-check-label">Override</label>
+                        <input aria-describedby="basic-addon3" class="form-check-input" id="override_image"
+                               name="override_image" type="checkbox" value="Override existing image">
+                        <label class="form-check-label" for="override_image">Override</label>
                     </div>
                     <div style="margin-bottom: 10px"></div>
                     <div class="form-group">
                         <label for="image_description">Image Description</label>
                         <div class="input-group mb-3">
-                            <textarea class="form-control" id="image_description" aria-describedby="basic-addon3"
-                                      rows="3" required placeholder="Please provide image description">This is a basic test image which takes the request json as an input along with other parameters. To know more about the model and the input, please refer main branch at https://github.com/himanshumps/pertaas-job.git</textarea>
+                            <textarea aria-describedby="basic-addon3" class="form-control" id="image_description"
+                                      placeholder="Please provide image description" required rows="3">This is a basic test image which takes the request json as an input along with other parameters. To know more about the model and the input, please refer main branch at https://github.com/himanshumps/pertaas-job.git</textarea>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="github_url">Github URL</label>
-                        <input type="text" class="form-control"
-                               id="github_url"
+                        <input class="form-control" id="github_url"
+                               type="text"
                                value="https://github.com/himanshumps/pertaas-job.git">
                     </div>
                     <div class="form-group">
                         <label for="revision">Branch / Tag / Revision</label>
-                        <input type="text" class="form-control"
-                               id="revision"
+                        <input class="form-control" id="revision"
+                               type="text"
                                value="main">
                     </div>
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary mb-3">Create custom image</button>
+                        <button class="btn btn-primary mb-3" type="submit">Create custom image</button>
                     </div>
                 </form>
 
@@ -186,7 +186,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Job Status</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -194,7 +194,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
             </div>
         </div>
     </div>

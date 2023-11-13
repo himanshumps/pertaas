@@ -10,17 +10,17 @@ import java.nio.charset.StandardCharsets;
 @Path("/getDocument")
 public class GetDocumentController {
 
-    @Inject
-    Bucket bucket;
+  @Inject
+  Bucket bucket;
 
-    @GET
-    @Path("/{documentId}")
-    public byte[] getDocumentFromCouchbase(String documentId) {
-        try{
-            return bucket.defaultCollection().get(documentId).contentAsBytes();
-        } catch(Exception e) {
-            return "No data found".getBytes(StandardCharsets.UTF_8);
-        }
+  @GET
+  @Path("/{documentId}")
+  public byte[] getDocumentFromCouchbase(String documentId) {
+    try {
+      return bucket.defaultCollection().get(documentId).contentAsBytes();
+    } catch (Exception e) {
+      return "No data found".getBytes(StandardCharsets.UTF_8);
     }
+  }
 
 }

@@ -15,24 +15,25 @@ import java.time.Duration;
 @ApplicationScoped
 public class StartupAndStopEventBean {
 
-    @Inject
-    Bucket bucket;
-    @Inject
-    Cluster cluster;
-    @Inject
-    ClusterEnvironment clusterEnvironment;
+  @Inject
+  Bucket bucket;
+  @Inject
+  Cluster cluster;
+  @Inject
+  ClusterEnvironment clusterEnvironment;
 
-    void onStart(@Observes StartupEvent ev) {
-        Log.info("The couchbase connection is being initiated");
-        bucket.getClass();
-        Log.info("The couchbase connection has being initiated");
+  void onStart(@Observes StartupEvent ev) {
+    Log.info("The couchbase connection is being initiated");
+    bucket.getClass();
+    Log.info("The couchbase connection has being initiated");
+  }
+
+  void onStop(@Observes ShutdownEvent ev) {
+    Log.info("The application is stopping...");
+    try {
+      cluster.disconnect(Duration.ofMinutes(1));
+    } finally {
+      clusterEnvironment.shutdown(Duration.ofMinutes(1));
     }
-    void onStop(@Observes ShutdownEvent ev) {
-        Log.info("The application is stopping...");
-        try{
-            cluster.disconnect(Duration.ofMinutes(1));
-        } finally {
-            clusterEnvironment.shutdown(Duration.ofMinutes(1));
-        }
-    }
+  }
 }

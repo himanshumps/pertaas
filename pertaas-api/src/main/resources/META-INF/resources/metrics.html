@@ -4,10 +4,10 @@
 <head>
 
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta content="" name="description">
+    <meta content="" name="author">
 
     <title>PerTaas | Metrics</title>
 
@@ -40,7 +40,7 @@
         <!-- Sidebar - Brand -->
         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
             <div class="sidebar-brand-icon">
-                <img class="sidebar-card-illustration mb-2" width="70%" height="70%" src="img/text.png">
+                <img class="sidebar-card-illustration mb-2" height="70%" src="img/text.png" width="70%">
             </div>
         </a>
 
@@ -103,7 +103,7 @@
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
+    <div class="d-flex flex-column" id="content-wrapper">
 
         <!-- Main Content -->
         <div id="content">
@@ -122,17 +122,17 @@
                 <form class="user">
                     <div class="form-group row">
                         <div class="col-sm-2 mb-3 mb-sm-0">
-                            <input type="text" class="form-control form-control-user"
-                                   id="jobID"
-                                   placeholder="Enter Job ID...">
+                            <input class="form-control form-control-user" id="jobID"
+                                   placeholder="Enter Job ID..."
+                                   type="text">
                         </div>
                         <div class="col-sm-2 mb-3 mb-sm-0">
-                            <input type="button" class="btn btn-primary btn-user btn-block" onclick="fetchData()"
+                            <input class="btn btn-primary btn-user btn-block" onclick="fetchData()" type="button"
                                    value="Fetch Data"/>
                         </div>
                     </div>
                 </form>
-                <div id="requestJsonCard" class="card shadow mb-4 d-none">
+                <div class="card shadow mb-4 d-none" id="requestJsonCard">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Request Json</h6>
                     </div>
@@ -144,7 +144,7 @@
                 </div>
 
                 <!-- DataTable -->
-                <div id="summaryMetricsCard" class="card shadow mb-4 d-none">
+                <div class="card shadow mb-4 d-none" id="summaryMetricsCard">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Summary Metrics</h6>
                     </div>
@@ -157,7 +157,7 @@
                     </div>
                 </div>
                 <!-- DataTable -->
-                <div id="stepMetricsCard" class="card shadow mb-4 d-none">
+                <div class="card shadow mb-4 d-none" id="stepMetricsCard">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Scrape Metrics</h6>
                     </div>
