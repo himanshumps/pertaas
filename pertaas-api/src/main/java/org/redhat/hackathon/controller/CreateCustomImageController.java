@@ -11,6 +11,7 @@ import io.fabric8.tekton.pipeline.v1.PipelineRun;
 import io.fabric8.tekton.pipeline.v1.PipelineRunBuilder;
 import io.fabric8.tekton.pipeline.v1.WorkspaceBindingBuilder;
 import io.quarkus.logging.Log;
+import io.smallrye.common.annotation.RunOnVirtualThread;
 import io.vertx.core.json.JsonObject;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.POST;
@@ -31,6 +32,7 @@ public class CreateCustomImageController {
 
   @POST
   @Path("/create")
+  @RunOnVirtualThread
   public String createCustomImage(String jsonString) {
     JsonObject jsonObject = new JsonObject(jsonString);
     String imageName = jsonObject.getString("image_name");
@@ -85,9 +87,4 @@ public class CreateCustomImageController {
     tektonClient.v1().pipelineRuns().resource(pipelineRunBuilderSpecNested).create();
     return "The request for custom image creation has been accepted. The new image would be available after 5 minutes if there are no failures. Please share the ID: \"" + pipelineRunId + "\" with openshift administrator in case of any issues.";
   }
-
-  record ImageDetails(String imageName, String imageDetails) {
-  }
-
-  ;
 }

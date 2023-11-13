@@ -1,5 +1,6 @@
 package org.redhat.hackathon.controller;
 
+import io.smallrye.common.annotation.RunOnVirtualThread;
 import io.vertx.core.json.JsonObject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;

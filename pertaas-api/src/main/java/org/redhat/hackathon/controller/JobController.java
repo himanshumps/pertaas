@@ -21,6 +21,7 @@ public class JobController {
 
   @GET
   @Path("/generateId")
+  @RunOnVirtualThread
   public String generateJobId() {
     CounterResult counterResult = bucket.defaultCollection().binary().increment("JOB_COUNTER", IncrementOptions.incrementOptions().initial(1));
     return "job-" + Long.valueOf(counterResult.content()).intValue();

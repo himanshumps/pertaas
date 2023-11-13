@@ -13,6 +13,7 @@ import io.fabric8.tekton.pipeline.v1.PipelineRun;
 import io.fabric8.tekton.pipeline.v1.PipelineRunBuilder;
 import io.fabric8.tekton.pipeline.v1.WorkspaceBindingBuilder;
 import io.quarkus.logging.Log;
+import io.smallrye.common.annotation.RunOnVirtualThread;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import jakarta.inject.Inject;
@@ -55,6 +56,7 @@ public class HelmChartController {
    */
   @GET
   @Path("/charts")
+  @RunOnVirtualThread
   public String getHelmCharts() throws MalformedURLException, URISyntaxException {
     // TODO: Create helm repo if it does not exists. This doesn't work on openshift sandbox as we do not have role to do so
         /*
@@ -112,6 +114,7 @@ public class HelmChartController {
    */
   @POST
   @Path("/create")
+  @RunOnVirtualThread
   public String createHelmJobViaTektonPipeline(String jsonString) {
     Log.info("Received: " + jsonString);
     CounterResult counterResult = bucket.defaultCollection().binary().increment("JOB_COUNTER", IncrementOptions.incrementOptions().initial(1));
