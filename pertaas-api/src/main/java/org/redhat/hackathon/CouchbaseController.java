@@ -12,12 +12,12 @@ import java.util.concurrent.CompletionStage;
 @Path("/couchbase")
 public class CouchbaseController {
 
-    @Inject
-    Bucket bucket;
+  @Inject
+  Bucket bucket;
 
-    @GET
-    @Path("/{identifier}")
-    public CompletionStage<byte[]> getCouchbaseByIdentifier(@PathParam("identifier") String identifier) {
-        return CompletableFuture.completedFuture(bucket.defaultCollection().get(identifier).contentAsBytes());
-    }
+  @GET
+  @Path("/{identifier}")
+  public CompletionStage<byte[]> getCouchbaseByIdentifier(@PathParam("identifier") String identifier) {
+    return CompletableFuture.completedFuture(bucket.defaultCollection().get(identifier).contentAsBytes());
+  }
 }

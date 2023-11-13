@@ -13,30 +13,30 @@ import java.time.Duration;
 
 @ApplicationScoped
 public class CouchbaseClusterBean {
-    @Inject
-    ClusterEnvironment clusterEnvironment;
+  @Inject
+  ClusterEnvironment clusterEnvironment;
 
-    @ConfigProperty(name="couchbaseConnectionString")
-    String couchbaseConnectionString;
+  @ConfigProperty(name = "couchbaseConnectionString")
+  String couchbaseConnectionString;
 
-    @ConfigProperty(name = "couchbaseUsername", defaultValue = "pertaas_user")
-    String couchbaseUsername;
+  @ConfigProperty(name = "couchbaseUsername", defaultValue = "pertaas_user")
+  String couchbaseUsername;
 
-    @ConfigProperty(name = "couchbasePassword")
-    String couchbasePassword;
+  @ConfigProperty(name = "couchbasePassword")
+  String couchbasePassword;
 
-    /**
-     * Creates the couchbase cluster object and waits for a minute to initialize
-     *
-     * @return The couchbase cluster object
-     */
-    @Produces
-    @Default
-    Cluster cluster() {
-        Cluster cluster = Cluster.connect(couchbaseConnectionString,
-                ClusterOptions.clusterOptions(couchbaseUsername, couchbasePassword)
-                        .environment(clusterEnvironment));
-        cluster.waitUntilReady(Duration.ofMinutes(1));
-        return cluster;
-    }
+  /**
+   * Creates the couchbase cluster object and waits for a minute to initialize
+   *
+   * @return The couchbase cluster object
+   */
+  @Produces
+  @Default
+  Cluster cluster() {
+    Cluster cluster = Cluster.connect(couchbaseConnectionString,
+        ClusterOptions.clusterOptions(couchbaseUsername, couchbasePassword)
+            .environment(clusterEnvironment));
+    cluster.waitUntilReady(Duration.ofMinutes(1));
+    return cluster;
+  }
 }
