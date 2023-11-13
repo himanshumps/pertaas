@@ -24,7 +24,7 @@
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     <style>
         table.dataTable1 thead th {
-          white-space: nowrap
+            white-space: nowrap
         }
     </style>
 </head>
@@ -150,7 +150,8 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered" id="tSummaryMetrics" style="width: 100%; cellspacing: 0">
+                            <table class="table table-bordered" id="tSummaryMetrics"
+                                   style="width: 100%; cellspacing: 0">
                             </table>
                         </div>
                     </div>
@@ -218,13 +219,13 @@
         $('#requestJsonCard').removeClass('d-block');
         $('#stepMetricsCard').removeClass('d-block');
         $('#summaryMetricsCard').removeClass('d-block');
-        if ( $.fn.dataTable.isDataTable( '#tStepMetrics' ) ) {
+        if ($.fn.dataTable.isDataTable('#tStepMetrics')) {
             console.log("It is a data table .. destroying now");
             table = $('#tStepMetrics').DataTable();
             table.destroy();
             $('#tStepMetrics').empty();
         }
-        if ( $.fn.dataTable.isDataTable( '#tSummaryMetrics' ) ) {
+        if ($.fn.dataTable.isDataTable('#tSummaryMetrics')) {
             console.log("It is a data table .. destroying now");
             table = $('#tSummaryMetrics').DataTable();
             table.destroy();
@@ -232,108 +233,108 @@
         }
         console.log($("#jobID").val());
         $.ajax({
-                "async": true,
-                "crossDomain": true,
-                "url": "/metrics/StepMeterRegistry/" + $("#jobID").val(),
-                "method": "GET"
-            })
-                .done(
-                    function (response) {
-                        console.log("success")
-                        console.log(response);
-                        var dataVar = JSON.parse(response);
-                        console.log(dataVar);
-                        $('#tStepMetrics').DataTable({
-                            destroy: true,
-                            columnDefs: [{
-                              targets: 0,
-                              className: 'text-nowrap'
-                            }],
-                             data: dataVar.data,
-                             columns: dataVar.columns
-                        });
-                        $('#stepMetricsCard').addClass('d-block');
-                    }
-                )
-                .fail(function (response) {
-                    console.log("fail")
+            "async": true,
+            "crossDomain": true,
+            "url": "/metrics/StepMeterRegistry/" + $("#jobID").val(),
+            "method": "GET"
+        })
+            .done(
+                function (response) {
+                    console.log("success")
                     console.log(response);
+                    var dataVar = JSON.parse(response);
+                    console.log(dataVar);
                     $('#tStepMetrics').DataTable({
-                            destroy: true,
-                            columnDefs: [{
-                              targets: 0,
-                              className: 'text-nowrap'
-                            }],
-                             data: [["<p style=\"color: red\">There was an error fetching the data for the job.</p>"]],
-                             columns: [{"title": "Error"}]
-                        });
-                        $('#stepMetricsCard').addClass('d-block');
+                        destroy: true,
+                        columnDefs: [{
+                            targets: 0,
+                            className: 'text-nowrap'
+                        }],
+                        data: dataVar.data,
+                        columns: dataVar.columns
+                    });
+                    $('#stepMetricsCard').addClass('d-block');
+                }
+            )
+            .fail(function (response) {
+                console.log("fail")
+                console.log(response);
+                $('#tStepMetrics').DataTable({
+                    destroy: true,
+                    columnDefs: [{
+                        targets: 0,
+                        className: 'text-nowrap'
+                    }],
+                    data: [["<p style=\"color: red\">There was an error fetching the data for the job.</p>"]],
+                    columns: [{"title": "Error"}]
                 });
-                $.ajax({
-                "async": true,
-                "crossDomain": true,
-                "url": "/metrics/SimpleMeterRegistry/" + $("#jobID").val(),
-                "method": "GET"
-            })
-                .done(
-                    function (response) {
-                        console.log("success")
-                        console.log(response);
-                        var dataVar = JSON.parse(response);
-                        console.log(dataVar);
-                        $('#tSummaryMetrics').DataTable({
-                            destroy: true,
-                            columnDefs: [{
-                              targets: 0,
-                              className: 'text-nowrap'
-                            }],
-                             data: dataVar.data,
-                             columns: dataVar.columns,
-                             bPaginate: false,
-                             bInfo: false,
-                             searching: false,
-                             paging: false,
-                             info: false
-                        });
-                        $('#summaryMetricsCard').addClass('d-block');
-                    }
-                )
-                .fail(function (response) {
-                    console.log("fail")
+                $('#stepMetricsCard').addClass('d-block');
+            });
+        $.ajax({
+            "async": true,
+            "crossDomain": true,
+            "url": "/metrics/SimpleMeterRegistry/" + $("#jobID").val(),
+            "method": "GET"
+        })
+            .done(
+                function (response) {
+                    console.log("success")
                     console.log(response);
+                    var dataVar = JSON.parse(response);
+                    console.log(dataVar);
                     $('#tSummaryMetrics').DataTable({
-                            destroy: true,
-                            columnDefs: [{
-                              targets: 0,
-                              className: 'text-nowrap'
-                            }],
-                             data: [["<p style=\"color: red\">There was an error fetching the data for the job.</p>"]],
-                             columns: [{"title": "Error"}]
-                        });
-                        $('#summaryMetricsCard').addClass('d-block');
+                        destroy: true,
+                        columnDefs: [{
+                            targets: 0,
+                            className: 'text-nowrap'
+                        }],
+                        data: dataVar.data,
+                        columns: dataVar.columns,
+                        bPaginate: false,
+                        bInfo: false,
+                        searching: false,
+                        paging: false,
+                        info: false
+                    });
+                    $('#summaryMetricsCard').addClass('d-block');
+                }
+            )
+            .fail(function (response) {
+                console.log("fail")
+                console.log(response);
+                $('#tSummaryMetrics').DataTable({
+                    destroy: true,
+                    columnDefs: [{
+                        targets: 0,
+                        className: 'text-nowrap'
+                    }],
+                    data: [["<p style=\"color: red\">There was an error fetching the data for the job.</p>"]],
+                    columns: [{"title": "Error"}]
                 });
+                $('#summaryMetricsCard').addClass('d-block');
+            });
 
 
-                $.ajax({
-                "async": true,
-                "crossDomain": true,
-                "url": "/getDocument/" + $("#jobID").val() + "::REQUEST_JSON",
-                "method": "GET"
-            })
-                .done(
-                    function (response) {
-                        console.log("success")
-                        console.log(response);
-                        $("p#request_json").text(response);
-                        $('#requestJsonCard').addClass('d-block');
-                    }
-                )
-                .fail(function (response) {
-                    console.log("fail")
+        $.ajax({
+            "async": true,
+            "crossDomain": true,
+            "url": "/getDocument/" + $("#jobID").val() + "::REQUEST_JSON",
+            "method": "GET"
+        })
+            .done(
+                function (response) {
+                    console.log("success")
                     console.log(response);
                     $("p#request_json").text(response);
-                   $('#requestJsonCard').addClass('d-block');
-                });
+                    $('#requestJsonCard').addClass('d-block');
+                }
+            )
+            .fail(function (response) {
+                console.log("fail")
+                console.log(response);
+                $("p#request_json").text(response);
+                $('#requestJsonCard').addClass('d-block');
+            });
 
     }
 </script>
