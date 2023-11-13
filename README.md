@@ -539,6 +539,49 @@ spec:
 EOF
 ```
 
+### Prometheus Monitoring 
+
+Create the monitoring stack and the pod monitor to scrape the metrics from the job pods.
+
+```bash
+oc create -f - <<EOF
+apiVersion: monitoring.rhobs/v1alpha1
+kind: MonitoringStack
+metadata:
+  name: sample-monitoring-stack
+spec:
+  alertmanagerConfig:
+    disabled: false
+  logLevel: debug
+  prometheusConfig:
+    replicas: 2
+  resourceSelector: {}
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+  retention: 5h
+---
+apiVersion: monitoring.rhobs/v1
+kind: PodMonitor
+metadata:
+  name: podmonitor-for-pertaas-job
+spec:
+  podMetricsEndpoints:
+    - interval: 10s
+      path: /metrics
+      port: web
+      scheme: http
+      scrapeTimeout: 9s
+  selector:
+    matchLabels:
+      pertaas-job: 'true'
+EOF
+```
+
 
 ### PerTaaS API Application
 
