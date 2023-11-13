@@ -1,15 +1,10 @@
-package org.redhat.hackathon.job;
+package org.redhat.hackathon.controller;
 
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.kv.CounterResult;
 import com.couchbase.client.java.kv.IncrementOptions;
 import io.fabric8.kubernetes.api.model.EmptyDirVolumeSource;
-import io.fabric8.kubernetes.api.model.batch.v1.Job;
-import io.fabric8.kubernetes.client.KubernetesClient;
-import io.fabric8.kubernetes.client.KubernetesClientBuilder;
-import io.fabric8.openshift.client.DefaultOpenShiftClient;
 import io.fabric8.openshift.client.OpenShiftClient;
-import io.fabric8.openshift.client.OpenShiftConfigBuilder;
 import io.fabric8.tekton.client.TektonClient;
 import io.fabric8.tekton.pipeline.v1.ParamValue;
 import io.fabric8.tekton.pipeline.v1.PipelineRun;

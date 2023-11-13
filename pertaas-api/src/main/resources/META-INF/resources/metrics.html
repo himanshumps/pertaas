@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>PerTaas - Matrix View</title>
+    <title>PerTaas | Metrics</title>
 
     <!-- Custom fonts for this template -->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -48,7 +48,7 @@
         <hr class="sidebar-divider my-0">
 
         <!-- Nav Item - Dashboard -->
-        <li class="nav-item active">
+        <li class="nav-item">
             <a class="nav-link" href="index.html">
                 <i class="fas fa-fw fa-home"></i>
                 <span>Home</span></a>
@@ -79,10 +79,16 @@
         </li>
 
         <!-- Nav Item - Tables -->
-        <li class="nav-item">
-            <a class="nav-link" href="matrixView.html">
+        <li class="nav-item active">
+            <a class="nav-link" href="metrics.html">
                 <i class="fas fa-fw fa-table"></i>
-                <span>Matrix View</span></a>
+                <span>Metrics</span></a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="customTestImage.html">
+                <i class="fas fa-fw fa-cloud"></i>
+                <span>Create Custom Image</span></a>
         </li>
 
         <!-- Divider -->
@@ -114,7 +120,7 @@
             <div class="container-fluid">
 
                 <!-- Page Heading -->
-                <h1 class="h3 mb-2 text-gray-800">Matrix View</h1>
+                <h1 class="h3 mb-2 text-gray-800">Metrics</h1>
 
                 <form class="user">
                     <div class="form-group row">
@@ -123,6 +129,8 @@
                                    id="jobID"
                                    placeholder="Enter Job ID...">
                         </div>
+                    </div>
+                    <div class="form-group row">
                         <div class="col-sm-2 mb-3 mb-sm-0">
                             <input type="button" class="btn btn-primary btn-user btn-block" onclick="fetchData()"
                                    value="Fetch Data"/>

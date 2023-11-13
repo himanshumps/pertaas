@@ -1,4 +1,4 @@
-package org.redhat.hackathon.job;
+package org.redhat.hackathon.controller;
 
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.kv.CounterResult;

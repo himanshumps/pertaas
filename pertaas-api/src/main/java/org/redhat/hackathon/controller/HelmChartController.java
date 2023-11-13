@@ -1,9 +1,8 @@
-package org.redhat.hackathon.job;
+package org.redhat.hackathon.controller;
 
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.kv.CounterResult;
 import com.couchbase.client.java.kv.IncrementOptions;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.fabric8.kubernetes.api.model.EmptyDirVolumeSource;
@@ -45,11 +44,20 @@ public class HelmChartController {
     record ImageNameAndDetails(String name, String description) {
     }
 
+    /**
+     * Fetch the helm chart by reading the index.yaml from the helm repository,
+     * convert the yaml to json,
+     * read the latest version of all helm charts and send it back in json formt
+     * @return
+     * @throws MalformedURLException
+     * @throws URISyntaxException
+     */
     @GET
     @Path("/charts")
-    public String getImages() throws MalformedURLException, URISyntaxException {
-        // Create helm repo if it does not exists. This doesn't work on openshift sandbox as we do not have role to do so
-        /*AtomicReference<Boolean> createRepo = new AtomicReference<>(Boolean.TRUE);
+    public String getHelmCharts() throws MalformedURLException, URISyntaxException {
+        // TODO: Create helm repo if it does not exists. This doesn't work on openshift sandbox as we do not have role to do so
+        /*
+        AtomicReference<Boolean> createRepo = new AtomicReference<>(Boolean.TRUE);
         openShiftClient.helmChartRepositories().list().getItems().forEach(helmChartRepository -> {
             System.out.println(helmChartRepository.getMetadata().getName());
             if (helmChartRepository.getMetadata().getName().equalsIgnoreCase("pertaas-job-helm-repository")) {
@@ -64,6 +72,7 @@ public class HelmChartController {
             helmChartRepositorySpec.setConnectionConfig(new ConnectionConfigBuilder().withUrl("https://himanshumps.github.io/pertaas-helm/").build());
             openShiftClient.resource(helmChartRepository).create();
         }*/
+
         // I am reading the Helm chart details from my github repo.
         // It should be read using openshift client or k8s client, but I did not find any API to get the chart info to achieve the same.
         // I am not using webclient here as the test uses webclient and if we create an instance here, it will add to the existing micrometer metrics
@@ -79,7 +88,7 @@ public class HelmChartController {
             entries.forEach(entry -> {
                 //Log.info("entry.getKey(): " + entry.getKey());
                 if (helmChartNameAndDescription.get(entry.getKey()) == null) {
-                    Log.info("entries.getJsonArray(entry.getKey()): " + entries.getJsonArray(entry.getKey()));
+                    //Log.info("entries.getJsonArray(entry.getKey()): " + entries.getJsonArray(entry.getKey()));
                     imageNameAndDetailsList.add(new ImageNameAndDetails(
                             entry.getKey(), // Always use the latest version. If other version needs to be supported, add `" --version " + entries.getJsonArray(entry.getKey()).getJsonObject(0).getString("version")`
                             entry.getKey() + " - " + entries.getJsonArray(entry.getKey()).getJsonObject(0).getString("description")
@@ -93,6 +102,12 @@ public class HelmChartController {
         return Json.encode(imageNameAndDetailsList);
     }
 
+    /**
+     * Create the job using the tekton pipeline. It passes the values received in UI to the tekton job which in turn
+     * passes it to the helm chart which creates the job.
+     * @param jsonString
+     * @return
+     */
     @POST
     @Path("/create")
     public String createHelmJobViaTektonPipeline(String jsonString) {

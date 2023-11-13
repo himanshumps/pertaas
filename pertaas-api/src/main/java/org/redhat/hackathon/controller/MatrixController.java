@@ -1,4 +1,4 @@
-package org.redhat.hackathon.job;
+package org.redhat.hackathon.controller;
 
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
@@ -11,9 +11,6 @@ import io.smallrye.common.annotation.RunOnVirtualThread;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
-import org.redhat.hackathon.util.HTMLTableBuilder;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
