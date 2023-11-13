@@ -587,6 +587,8 @@ Expose the prometheus route.
 oc expose service sample-monitoring-stack-prometheus
 ```
 
+Access the prometheus application by hitting the non ssl route + "/graph"
+
 ### PerTaaS API Application
 
 The application can be deployed as knative application or as a deployment. The startup time for the application is around 3 seconds as the couchbase cluster and bucket initialization delays the startup.
